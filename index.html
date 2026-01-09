@@ -1,0 +1,1931 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Exámenes Académicos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(to right, #2c3e50, #4a6491);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-menu, .sub-menu, .exam-screen, .result-screen {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .menu-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .menu-options {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .menu-btn {
+            padding: 18px 25px;
+            font-size: 1.2rem;
+            background: linear-gradient(to right, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11);
+        }
+
+        .menu-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1);
+            background: linear-gradient(to right, #2980b9, #2573a7);
+        }
+
+        .menu-btn i {
+            margin-right: 15px;
+            font-size: 1.4rem;
+        }
+
+        .menu-btn.biology {
+            background: linear-gradient(to right, #27ae60, #219653);
+        }
+
+        .menu-btn.biology:hover {
+            background: linear-gradient(to right, #219653, #1e8449);
+        }
+
+        .menu-btn.history {
+            background: linear-gradient(to right, #e67e22, #d35400);
+        }
+
+        .menu-btn.history:hover {
+            background: linear-gradient(to right, #d35400, #ba4a00);
+        }
+
+        .menu-btn.digital {
+            background: linear-gradient(to right, #9b59b6, #8e44ad);
+        }
+
+        .menu-btn.digital:hover {
+            background: linear-gradient(to right, #8e44ad, #7d3c98);
+        }
+
+        .menu-btn.back {
+            background: linear-gradient(to right, #95a5a6, #7f8c8d);
+        }
+
+        .menu-btn.back:hover {
+            background: linear-gradient(to right, #7f8c8d, #6c7b7d);
+        }
+
+        .question-counter {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .question-container {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            text-align: left;
+            border-left: 5px solid #3498db;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            padding: 15px;
+            border-radius: 8px;
+            background-color: white;
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1.05rem;
+        }
+
+        .option:hover {
+            background-color: #f1f8ff;
+            border-color: #a0d2ff;
+        }
+
+        .option.selected {
+            border-color: #3498db;
+            background-color: #e3f2fd;
+        }
+
+        .option.correct {
+            border-color: #27ae60;
+            background-color: #d5f4e6;
+            color: #155724;
+        }
+
+        .option.incorrect {
+            border-color: #e74c3c;
+            background-color: #fde8e8;
+            color: #721c24;
+        }
+
+        .feedback {
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 25px;
+            text-align: left;
+            display: none;
+        }
+
+        .feedback-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .feedback-content {
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .correct-answer {
+            background-color: #d5f4e6;
+            border-left: 5px solid #27ae60;
+        }
+
+        .incorrect-answer {
+            background-color: #fde8e8;
+            border-left: 5px solid #e74c3c;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .nav-btn {
+            padding: 12px 25px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .nav-btn.next {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .nav-btn.next:hover {
+            background-color: #2980b9;
+        }
+
+        .nav-btn.prev {
+            background-color: #95a5a6;
+            color: white;
+        }
+
+        .nav-btn.prev:hover {
+            background-color: #7f8c8d;
+        }
+
+        .nav-btn.submit {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .nav-btn.submit:hover {
+            background-color: #219653;
+        }
+
+        .result-screen {
+            text-align: center;
+        }
+
+        .score-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 30px auto;
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+        }
+
+        .score-percent {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .score-text {
+            font-size: 1.2rem;
+            margin-top: 5px;
+        }
+
+        .result-details {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .result-item {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            min-width: 200px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .result-item.correct {
+            border-top: 5px solid #27ae60;
+        }
+
+        .result-item.incorrect {
+            border-top: 5px solid #e74c3c;
+        }
+
+        .result-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .result-label {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+        }
+
+        .question-review {
+            text-align: left;
+            margin-top: 40px;
+            background-color: #f9f9f9;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        .review-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .review-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #3498db;
+            background-color: white;
+        }
+
+        .review-item.correct {
+            border-left-color: #27ae60;
+            background-color: #f0fff4;
+        }
+
+        .review-item.incorrect {
+            border-left-color: #e74c3c;
+            background-color: #fff0f0;
+        }
+
+        .review-question {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .review-answer {
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .visible {
+            display: block;
+        }
+
+        .discipline-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .exam-info {
+            background-color: #e8f4fc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+            color: #2c3e50;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 10px;
+            }
+            
+            header {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .menu-btn {
+                padding: 15px;
+                font-size: 1.1rem;
+            }
+            
+            .question-container {
+                padding: 20px;
+            }
+            
+            .question-text {
+                font-size: 1.2rem;
+            }
+            
+            .score-circle {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .score-percent {
+                font-size: 2.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .main-menu, .sub-menu, .exam-screen, .result-screen {
+                padding: 20px;
+            }
+            
+            .menu-btn {
+                padding: 15px 10px;
+                font-size: 1rem;
+            }
+            
+            .navigation-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .nav-btn {
+                width: 100%;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-graduation-cap"></i> Simulador de Exámenes Académicos</h1>
+            <p class="subtitle">Prepara tus exámenes con simulacros y repasos interactivos</p>
+        </header>
+        
+        <!-- Menú principal -->
+        <div class="main-menu visible" id="main-menu">
+            <h2 class="menu-title">Selecciona una disciplina para estudiar</h2>
+            <div class="menu-options">
+                <button class="menu-btn biology" id="biology-btn">
+                    <i class="fas fa-dna"></i> Biología (20 preguntas)
+                </button>
+                <button class="menu-btn history" id="history-btn">
+                    <i class="fas fa-network-wired"></i> Historia y evolución del Internet en Bolivia (30 preguntas)
+                </button>
+                <button class="menu-btn digital" id="digital-btn">
+                    <i class="fas fa-laptop-code"></i> Impacto de la digitalización (30 preguntas)
+                </button>
+            </div>
+        </div>
+        
+        <!-- Submenú (aparece después de seleccionar una disciplina) -->
+        <div class="sub-menu hidden" id="sub-menu">
+            <h2 class="menu-title" id="submenu-title">¿Cómo deseas estudiar?</h2>
+            <div class="exam-info" id="exam-info">
+                <!-- Información sobre el examen se llenará dinámicamente -->
+            </div>
+            <div class="menu-options">
+                <button class="menu-btn" id="simulacro-btn">
+                    <i class="fas fa-clipboard-check"></i> Dar examen simulacro
+                </button>
+                <button class="menu-btn" id="repaso-btn">
+                    <i class="fas fa-book-reader"></i> Repasar con ayuda
+                </button>
+                <button class="menu-btn back" id="back-to-main">
+                    <i class="fas fa-arrow-left"></i> Volver al menú principal
+                </button>
+            </div>
+        </div>
+        
+        <!-- Pantalla del examen -->
+        <div class="exam-screen hidden" id="exam-screen">
+            <h2 class="menu-title" id="exam-title">Simulacro de Examen</h2>
+            <div class="question-counter" id="question-counter">Pregunta 1 de 20</div>
+            
+            <div class="question-container">
+                <div class="question-text" id="question-text"></div>
+                
+                <div class="options-container" id="options-container">
+                    <!-- Las opciones se generarán dinámicamente -->
+                </div>
+                
+                <!-- Feedback para el modo repaso -->
+                <div class="feedback" id="feedback">
+                    <div class="feedback-title">Sustento:</div>
+                    <div class="feedback-content" id="feedback-content"></div>
+                </div>
+            </div>
+            
+            <div class="navigation-buttons">
+                <button class="nav-btn prev" id="prev-btn">
+                    <i class="fas fa-chevron-left"></i> Anterior
+                </button>
+                <button class="nav-btn next" id="next-btn">
+                    Siguiente <i class="fas fa-chevron-right"></i>
+                </button>
+                <button class="nav-btn submit hidden" id="submit-btn">
+                    Finalizar <i class="fas fa-flag-checkered"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Pantalla de resultados -->
+        <div class="result-screen hidden" id="result-screen">
+            <h2 class="menu-title">Resultados del Simulacro</h2>
+            <div class="discipline-title" id="result-discipline"></div>
+            
+            <div class="score-circle">
+                <div class="score-percent" id="score-percent">0%</div>
+                <div class="score-text">Calificación</div>
+            </div>
+            
+            <div class="result-details">
+                <div class="result-item correct">
+                    <div class="result-value" id="correct-count">0</div>
+                    <div class="result-label">Correctas</div>
+                </div>
+                <div class="result-item incorrect">
+                    <div class="result-value" id="incorrect-count">0</div>
+                    <div class="result-label">Incorrectas</div>
+                </div>
+            </div>
+            
+            <div class="question-review">
+                <h3 class="review-title">Resumen de respuestas</h3>
+                <div id="review-list">
+                    <!-- Las preguntas revisadas se generarán dinámicamente -->
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px;">
+                <button class="menu-btn" id="restart-exam">
+                    <i class="fas fa-redo"></i> Intentar nuevamente
+                </button>
+                <button class="menu-btn back" id="back-to-main-from-result">
+                    <i class="fas fa-home"></i> Volver al menú principal
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos de las preguntas de Biología
+        const biologyQuestions = [
+            {
+                id: 1,
+                question: "En el estudio de la Biología, la célula ocupa un lugar central en la comprensión de la vida, ya que permite explicar cómo se organizan, funcionan y se reproducen los seres vivos. Desde esta perspectiva, la teoría celular sostiene que la célula constituye la unidad básica de organización de los organismos. ¿Cuál de las siguientes afirmaciones fundamenta de manera más precisa esta condición?",
+                options: [
+                    "La célula es la estructura más pequeña visible al microscopio óptico.",
+                    "La célula es considerada la unidad básica porque constituye la estructura más pequeña que posee la capacidad de llevar a cabo todas las funciones vitales de forma integrada y autónoma.",
+                    "La célula es importante porque todos los organismos están formados por al menos una célula.",
+                    "La célula es la unidad básica porque es el componente principal de los tejidos en organismos multicelulares."
+                ],
+                correctAnswer: 1,
+                explanation: "La célula es considerada la unidad básica de organización de los seres vivos porque constituye la estructura más pequeña que posee la capacidad de llevar a cabo, de forma integrada y autónoma, todas las funciones vitales necesarias para la vida."
+            },
+            {
+                id: 2,
+                question: "La diferencia fundamental entre una célula eucariota y una procariota radica en:",
+                options: [
+                    "El tamaño, siendo las eucariotas siempre más grandes que las procariotas.",
+                    "La presencia de mitocondrias en las eucariotas y su ausencia en procariotas.",
+                    "La organización del material genético: las eucariotas tienen un núcleo verdadero, mientras que las procariotas no.",
+                    "La capacidad de realizar fotosíntesis, que solo poseen las eucariotas."
+                ],
+                correctAnswer: 2,
+                explanation: "La diferencia fundamental entre las células eucariotas y procariotas se encuentra en la organización del material genético. Las células eucariotas poseen un núcleo verdadero, delimitado por una membrana nuclear, que alberga el ADN."
+            },
+            {
+                id: 3,
+                question: "En la célula, los distintos orgánulos cumplen funciones específicas que permiten su funcionamiento y supervivencia. En este contexto, ¿cuál es la función principal de la mitocondria dentro de la célula?",
+                options: [
+                    "Almacenar material genético y controlar las actividades celulares.",
+                    "Sintetizar proteínas para su uso dentro y fuera de la célula.",
+                    "Producir la mayor parte del ATP mediante la respiración celular.",
+                    "Almacenar agua, sales y otros materiales en la célula vegetal."
+                ],
+                correctAnswer: 2,
+                explanation: "La mitocondria es el orgánulo responsable de llevar a cabo la respiración celular, un conjunto de reacciones químicas mediante las cuales la célula transforma los nutrientes en energía utilizable en forma de ATP (adenosín trifosfato)."
+            },
+            {
+                id: 4,
+                question: "En los seres vivos, existen moléculas fundamentales que permiten conservar y transmitir las características biológicas de una generación a otra. En este contexto, ¿por qué el ADN cumple una función esencial en los organismos?",
+                options: [
+                    "Porque es la molécula más abundante en las células.",
+                    "Porque proporciona energía inmediata para las actividades celulares.",
+                    "Porque contiene la información genética necesaria para dirigir el desarrollo, funcionamiento y reproducción de los seres vivos.",
+                    "Porque forma parte de la estructura de la membrana celular."
+                ],
+                correctAnswer: 2,
+                explanation: "El ADN es una molécula fundamental porque contiene la información genética necesaria para dirigir el desarrollo, funcionamiento y reproducción de los seres vivos."
+            },
+            {
+                id: 5,
+                question: "En el estudio de la genética, se identifican unidades específicas responsables de la transmisión de las características hereditarias de los seres vivos. En este marco, ¿cómo se definen los genes desde el punto de vista biológico?",
+                options: [
+                    "Como las proteínas que determinan las características físicas de un organismo.",
+                    "Como los cromosomas completos que se transmiten de padres a hijos.",
+                    "Como segmentos específicos de ADN que contienen la información necesaria para la síntesis de proteínas.",
+                    "Como las células especializadas en la reproducción sexual."
+                ],
+                correctAnswer: 2,
+                explanation: "Los genes son segmentos específicos de ADN que contienen la información necesaria para la síntesis de proteínas o para la regulación de distintos procesos biológicos."
+            },
+            {
+                id: 6,
+                question: "En los organismos con reproducción sexual, existen distintos tipos de división celular que cumplen funciones específicas. En este contexto, ¿cuál es la principal diferencia entre la meiosis y la mitosis?",
+                options: [
+                    "La mitosis produce células con la mitad del número de cromosomas, mientras que la meiosis produce células con el número completo.",
+                    "La meiosis es un proceso de división celular que produce gametos con la mitad del número de cromosomas, mientras que la mitosis produce células somáticas con el mismo número de cromosomas.",
+                    "La mitosis solo ocurre en plantas, mientras que la meiosis solo ocurre en animales.",
+                    "La meiosis produce células genéticamente idénticas, mientras que la mitosis produce células genéticamente diversas."
+                ],
+                correctAnswer: 1,
+                explanation: "La meiosis es un proceso de división celular especializado que tiene como finalidad la formación de gametos con la mitad del número de cromosomas característico de la especie. En contraste, la mitosis cumple funciones de crecimiento, reparación y mantenimiento de los tejidos, sin alterar el número de cromosomas."
+            },
+            {
+                id: 7,
+                question: "En los seres vivos existen distintos tipos de reproducción, cada uno con características y consecuencias biológicas particulares. En este marco, ¿cuál es una característica fundamental de la reproducción sexual?",
+                options: [
+                    "Genera descendencia genéticamente idéntica al progenitor.",
+                    "Es más rápida y requiere menos energía que la reproducción asexual.",
+                    "Genera variabilidad genética en la descendencia debido a la combinación de material genético de dos progenitores.",
+                    "Solo ocurre en organismos unicelulares."
+                ],
+                correctAnswer: 2,
+                explanation: "La reproducción sexual se caracteriza por la unión de gametos, cada uno con la mitad del material genético, lo que da lugar a una descendencia genéticamente distinta a sus progenitores. Este proceso genera variabilidad genética."
+            },
+            {
+                id: 8,
+                question: "La teoría de la evolución constituye uno de los pilares de la Biología moderna, al ofrecer una explicación científica sobre el origen y la diversidad de los seres vivos. De acuerdo con la propuesta formulada por Charles Darwin, ¿cuál es el mecanismo principal que explica la diversidad biológica observada en la naturaleza?",
+                options: [
+                    "La herencia de caracteres adquiridos durante la vida del organismo.",
+                    "La creación divina de todas las especies en su forma actual.",
+                    "La selección natural, que favorece a los organismos con características ventajosas en un ambiente dado.",
+                    "Las mutaciones aleatorias como única fuerza evolutiva."
+                ],
+                correctAnswer: 2,
+                explanation: "La selección natural es el mecanismo central de la teoría evolutiva propuesta por Darwin y explica cómo se origina la diversidad de los seres vivos a partir de la variación existente dentro de las poblaciones."
+            },
+            {
+                id: 9,
+                question: "En el estudio de los niveles de organización de los seres vivos, la ecología distingue distintos conceptos que permiten comprender cómo se estructuran y relacionan los organismos en la naturaleza. Desde esta perspectiva, ¿qué se entiende por comunidad biológica?",
+                options: [
+                    "Un grupo de organismos de la misma especie que viven en un área determinada.",
+                    "El conjunto de todos los ecosistemas del planeta Tierra.",
+                    "El conjunto de todas las poblaciones de diferentes especies que habitan un mismo espacio geográfico.",
+                    "La relación entre los organismos vivos y los factores abióticos de un entorno."
+                ],
+                correctAnswer: 2,
+                explanation: "La comunidad biológica está conformada por el conjunto de todas las poblaciones de diferentes especies que habitan un mismo espacio geográfico y coinciden en un mismo período de tiempo."
+            },
+            {
+                id: 10,
+                question: "En el estudio de los ecosistemas, la ecología distingue entre componentes vivos y no vivos que, en conjunto, determinan las condiciones en las que se desarrolla la vida. Considerando esta clasificación, ¿cuáles de los siguientes elementos corresponden a los factores abióticos de un ecosistema, por constituir condiciones físicas y químicas del medio?",
+                options: [
+                    "Plantas, animales y hongos.",
+                    "Luz solar, agua, temperatura y nutrientes del suelo.",
+                    "Depredadores, presas y parásitos.",
+                    "Productores, consumidores y descomponedores."
+                ],
+                correctAnswer: 1,
+                explanation: "Los factores abióticos son los componentes no vivos del ecosistema y comprenden las condiciones físicas y químicas del ambiente que influyen directamente en la supervivencia, distribución y desarrollo de los organismos."
+            },
+            {
+                id: 11,
+                question: "En los ecosistemas, los organismos se organizan según el papel que cumplen en el flujo de energía y en el mantenimiento del equilibrio ecológico. En este contexto, ¿cuál es la función principal de los productores dentro de un ecosistema?",
+                options: [
+                    "Descomponer materia orgánica y reciclar nutrientes.",
+                    "Consumir a otros organismos para obtener energía.",
+                    "Transformar energía luminosa o química en energía química almacenada en moléculas orgánicas.",
+                    "Parasitar a otros organismos para sobrevivir."
+                ],
+                correctAnswer: 2,
+                explanation: "Los productores son organismos autótrofos que tienen la capacidad de fabricar su propio alimento mediante procesos como la fotosíntesis o la quimiosíntesis. Transforman la energía luminosa o química en energía química almacenada en moléculas orgánicas."
+            },
+            {
+                id: 12,
+                question: "En el cuerpo humano, los distintos sistemas cumplen funciones específicas que permiten el mantenimiento de la vida y el adecuado funcionamiento del organismo. En este marco, ¿cuál es la función principal del sistema respiratorio humano?",
+                options: [
+                    "Transportar nutrientes y oxígeno a todas las células del cuerpo.",
+                    "Eliminar desechos metabólicos a través de la orina.",
+                    "Realizar el intercambio de gases (oxígeno y dióxido de carbono) entre el cuerpo y el ambiente.",
+                    "Procesar los alimentos y absorber nutrientes."
+                ],
+                correctAnswer: 2,
+                explanation: "El sistema respiratorio tiene como función principal el intercambio de gases, específicamente la incorporación de oxígeno al organismo y la eliminación de dióxido de carbono producido como desecho metabólico."
+            },
+            {
+                id: 13,
+                question: "En el organismo humano, la sangre cumple un papel fundamental para el funcionamiento coordinado de los distintos sistemas y órganos. En este contexto, ¿por qué se considera que la sangre cumple una función esencial en el cuerpo?",
+                options: [
+                    "Porque es el tejido más abundante en el cuerpo humano.",
+                    "Porque regula directamente la temperatura corporal.",
+                    "Porque se encarga del transporte de sustancias vitales a lo largo del organismo.",
+                    "Porque produce hormonas que regulan diversas funciones corporales."
+                ],
+                correctAnswer: 2,
+                explanation: "La sangre cumple una función esencial porque se encarga del transporte de sustancias vitales a lo largo del organismo. Distribuye oxígeno, nutrientes, hormonas y recoge los desechos metabólicos."
+            },
+            {
+                id: 14,
+                question: "En la clasificación biológica tradicional de los seres vivos, los organismos se agrupan en distintos reinos según sus características estructurales y funcionales. En este marco, ¿a qué reino pertenecen las bacterias, considerando su organización celular?",
+                options: [
+                    "Reino Protista",
+                    "Reino Fungi",
+                    "Reino Monera",
+                    "Reino Plantae"
+                ],
+                correctAnswer: 2,
+                explanation: "Las bacterias pertenecen al reino Monera, el cual agrupa a los organismos procariotas, caracterizados por carecer de un núcleo verdadero y de orgánulos membranosos."
+            },
+            {
+                id: 15,
+                question: "En los organismos pluricelulares, diversos sistemas actúan de manera coordinada para regular los procesos internos y asegurar la estabilidad necesaria para la vida. En este marco, ¿qué concepto biológico describe este mecanismo de regulación permanente del organismo?",
+                options: [
+                    "Metabolismo",
+                    "Homeostasis",
+                    "Adaptación",
+                    "Evolución"
+                ],
+                correctAnswer: 1,
+                explanation: "La homeostasis hace referencia a la regulación constante del medio interno del organismo, permitiendo que variables como la temperatura, el pH, la presión osmótica y la concentración de sustancias se mantengan dentro de rangos compatibles con la vida."
+            },
+            {
+                id: 16,
+                question: "En los organismos con reproducción sexual, el origen de un nuevo individuo es el resultado de una secuencia ordenada de procesos biológicos. En este contexto, ¿qué describe de manera más adecuada el proceso de fecundación?",
+                options: [
+                    "La división de una célula en dos células hijas genéticamente idénticas.",
+                    "La formación de gametos mediante el proceso de meiosis.",
+                    "La unión de los gametos masculino y femenino para formar el cigoto.",
+                    "El desarrollo embrionario desde el cigoto hasta el organismo completo."
+                ],
+                correctAnswer: 2,
+                explanation: "La fecundación es el proceso biológico mediante el cual se produce la unión de los gametos masculino y femenino, cada uno portador de la mitad del material genético de la especie. Como resultado de esta fusión se forma el cigoto."
+            },
+            {
+                id: 17,
+                question: "En el estudio de los ecosistemas y de la vida en el planeta, se emplea el concepto de biodiversidad para describir la riqueza biológica existente en un determinado espacio o a escala global. En este contexto, ¿a qué se refiere principalmente la biodiversidad?",
+                options: [
+                    "Al número total de individuos de una especie en un ecosistema.",
+                    "A la variedad de seres vivos que existen en la Tierra, incluyendo diversidad genética, de especies y de ecosistemas.",
+                    "Exclusivamente al número de especies diferentes en un área geográfica.",
+                    "A la capacidad de los ecosistemas para producir biomasa."
+                ],
+                correctAnswer: 1,
+                explanation: "La biodiversidad se refiere a la variedad de seres vivos que existen en la Tierra y comprende distintos niveles de organización biológica, como la diversidad genética, la diversidad de especies y la diversidad de ecosistemas."
+            },
+            {
+                id: 18,
+                question: "En genética, los cambios en el material hereditario pueden tener distintas consecuencias para los organismos y las poblaciones. En este contexto, ¿por qué las mutaciones cumplen un papel importante en los procesos biológicos?",
+                options: [
+                    "Porque siempre generan características ventajosas para los organismos.",
+                    "Porque son la principal causa de enfermedades genéticas en la población humana.",
+                    "Porque generan variabilidad genética, que es la base sobre la cual actúan los procesos evolutivos.",
+                    "Porque aseguran que los hijos sean genéticamente idénticos a sus padres."
+                ],
+                correctAnswer: 2,
+                explanation: "Las mutaciones son cambios en la secuencia del ADN. Su importancia biológica radica en que generan variabilidad genética dentro de las poblaciones. Esta variabilidad constituye la base sobre la cual actúan los procesos evolutivos."
+            },
+            {
+                id: 19,
+                question: "En los ecosistemas, los organismos se relacionan entre sí a través de vínculos alimentarios que permiten la transferencia de materia y energía. En este marco, ¿qué representa una cadena alimentaria dentro de un ecosistema?",
+                options: [
+                    "La cantidad total de energía disponible en un ecosistema.",
+                    "El ciclo de los nutrientes entre los componentes bióticos y abióticos.",
+                    "El flujo de energía que se establece entre los organismos a través de relaciones de alimentación.",
+                    "La distribución espacial de los organismos en un hábitat determinado."
+                ],
+                correctAnswer: 2,
+                explanation: "Una cadena alimentaria representa el flujo de energía que se establece entre los organismos de un ecosistema a través de relaciones de alimentación. Este flujo se inicia en los productores, continúa en los consumidores y culmina en los descomponedores."
+            },
+            {
+                id: 20,
+                question: "La clasificación de los seres vivos requiere criterios precisos que permitan distinguir grupos naturales y comprender sus relaciones. En este marco, ¿a qué se refiere el término especie desde el punto de vista biológico?",
+                options: [
+                    "A un grupo de organismos que tienen características morfológicas similares.",
+                    "A organismos que viven en el mismo hábitat y compiten por los mismos recursos.",
+                    "A un grupo de organismos capaces de reproducirse entre sí y producir descendencia fértil en condiciones naturales.",
+                    "A organismos que comparten un ancestro común reciente."
+                ],
+                correctAnswer: 2,
+                explanation: "El concepto de especie se define principalmente a partir del criterio reproductivo, según el cual una especie está constituida por organismos capaces de reproducirse entre sí y producir descendencia fértil en condiciones naturales."
+            }
+        ];
+
+        // Datos de las preguntas de Historia del Internet en Bolivia
+        const historyQuestions = [
+            {
+                id: 1,
+                question: "A partir de lo expuesto en el artículo, ¿cómo define el concepto de acceso dial up?",
+                options: [
+                    "Un acceso a Internet mediante fibra óptica de alta velocidad.",
+                    "Una conexión que utiliza la línea telefónica convencional para conectar a Internet a velocidades de 56 kbps.",
+                    "Una conexión inalámbrica mediante satélite.",
+                    "Un acceso a Internet mediante cable coaxial."
+                ],
+                correctAnswer: 1,
+                explanation: "El artículo describe el acceso dial up a la forma cómo 'utilizaban la línea telefónica convencional para conectar a Internet a velocidades de 56 kbps'."
+            },
+            {
+                id: 2,
+                question: "Considerando lo mencionado en el texto, ¿cuáles son los sectores que se indican como beneficiados por la expansión del Internet en Bolivia?",
+                options: [
+                    "Solo el sector educativo.",
+                    "Educación, comercio electrónico y salud.",
+                    "Solo el sector de la salud.",
+                    "Comercio electrónico y turismo."
+                ],
+                correctAnswer: 1,
+                explanation: "El artículo señala explícitamente que el acceso generalizado a Internet ha transformado la educación (plataformas de aprendizaje virtual, clases a distancia), ha impulsado el comercio electrónico (tiendas virtuales como 'Tiendas del Valle' y Billetera Móvil) y ha mejorado la salud mediante la telemedicina y futuros servicios 5G."
+            },
+            {
+                id: 3,
+                question: "A partir de lo expuesto en el artículo, ¿cuáles son las implicaciones económicas asociadas a la expansión de la banda ancha y la fibra óptica entre 2006 y 2015?",
+                options: [
+                    "Aumento de los precios de los planes de Internet.",
+                    "Reducción de precios de los planes y auge del comercio electrónico.",
+                    "Disminución de la inversión en infraestructura.",
+                    "Aumento de la brecha digital entre zonas urbanas y rurales."
+                ],
+                correctAnswer: 1,
+                explanation: "En la sección 'Expansión de la banda ancha y fibra óptica (2006-2015)' se indica que el proyecto 'Red de Información Boliviana' contó con una inversión estimada de 350 millones de dólares, que los precios de los planes de 10 Mbps se redujeron a aproximadamente 15 dólares mensuales y que la banda ancha favoreció el auge del comercio electrónico."
+            },
+            {
+                id: 4,
+                question: "Basándose en la información proporcionada, ¿cuál es la tercera etapa de la conectividad descrita en la evolución del Internet en Bolivia?",
+                options: [
+                    "Era dial up (1995-2005)",
+                    "Expansión de banda ancha y fibra óptica (2006-2015)",
+                    "Convergencia móvil, 4G y la llegada de 5G (2016-presente)",
+                    "Primera conexión satelital (1995)"
+                ],
+                correctAnswer: 2,
+                explanation: "El artículo enumera tres subetapas cronológicas: 2.1 era dial up (1995-2005), 2.2 expansión de banda ancha y fibra óptica (2006-2015) y 2.3 convergencia móvil, 4G y la llegada de 5G."
+            },
+            {
+                id: 5,
+                question: "La lectura del texto permite identificar que el orden cronológico de los principales actores que lideraron cada fase de la conectividad en Bolivia es:",
+                options: [
+                    "Viva Bolivia, Entel, Gobierno boliviano, UMSA",
+                    "UMSA, Gobierno boliviano, Entel, Viva Bolivia",
+                    "Gobierno boliviano, UMSA, Viva Bolivia, Entel",
+                    "Entel, Viva Bolivia, UMSA, Gobierno boliviano"
+                ],
+                correctAnswer: 1,
+                explanation: "El artículo indica que primero, en 1995, la Universidad Mayor de San Andrés (UMSA) estableció la primera conexión satelital permanente. Luego, a partir de 2006, el gobierno boliviano lanzó el proyecto 'Red de Información Boliviana' (RIB) para instalar fibra óptica. En 2016, la empresa estatal Entel introdujo la red 4G LTE. Finalmente, en 2022, la empresa Viva Bolivia anunció la prueba piloto de 5G."
+            },
+            {
+                id: 6,
+                question: "Según el artículo, ¿qué porcentaje de la población boliviana se espera que tenga acceso a redes 5G para finales de 2024?",
+                options: [
+                    "15%",
+                    "20%",
+                    "25%",
+                    "30%"
+                ],
+                correctAnswer: 1,
+                explanation: "Para finales de 2024, según el artículo, se espera que el 20% de la población tenga acceso a 5G."
+            },
+            {
+                id: 7,
+                question: "El artículo señala que la expansión de la fibra óptica y la llegada de 5G han mejorado la conectividad, pero persiste una brecha digital entre zonas urbanas y rurales; ¿qué principio general se puede extraer sobre el rol de la infraestructura tecnológica en la inclusión digital?",
+                options: [
+                    "La infraestructura por sí sola garantiza la inclusión digital.",
+                    "La infraestructura es necesaria pero insuficiente si no se complementa con políticas que reduzcan desigualdades.",
+                    "La infraestructura no tiene relación con la inclusión digital.",
+                    "La brecha digital se elimina automáticamente con la implementación de nueva tecnología."
+                ],
+                correctAnswer: 1,
+                explanation: "El texto indica que la instalación de fibra óptica (2006‑2015) aumentó la cobertura urbana al 60% y redujo precios, y que la implementación de 5G está prevista para zonas estratégicas, pero aun así el artículo señala que en 2023 el 68% de los hogares rurales carecen de acceso fijo. Además, en la sección de desafíos se propone incentivar inversión privada y subsidios como políticas de apoyo para cerrar la brecha."
+            },
+            {
+                id: 8,
+                question: "El artículo señala que la diferencia porcentual en la penetración de Internet entre hogares urbanos y rurales cambió entre 2003 y 2015; ¿cuál de las siguientes afirmaciones describe mejor esa evolución?",
+                options: [
+                    "La brecha disminuyó de 26 puntos porcentuales a 4 puntos.",
+                    "La brecha aumentó de aproximadamente 4 puntos porcentuales a 26 puntos.",
+                    "La brecha se mantuvo constante en 22 puntos porcentuales.",
+                    "La brecha desapareció completamente."
+                ],
+                correctAnswer: 1,
+                explanation: "En 2003, según el texto, el 5% de los hogares urbanos tenía acceso y menos del 1% de los rurales (aprox. 0,8%), lo que implica una diferencia de unos 4 puntos porcentuales. En 2015, la penetración era del 38% en zonas urbanas y del 12% en rurales, lo que genera una diferencia de 26 puntos. La variación entre ambas fechas es de aproximadamente 22 puntos porcentuales, mostrando un aumento de la brecha."
+            },
+            {
+                id: 9,
+                question: "A partir de lo expuesto en el artículo, ¿qué efecto se puede deducir de la implementación del proyecto 'Red de Información Boliviana' (2006‑2015) sobre la penetración de Internet en los hogares urbanos?",
+                options: [
+                    "Disminución del 5% al 1%",
+                    "Aumento del 5% al 38%",
+                    "Mantenimiento en el 12%",
+                    "Reducción del 38% al 12%"
+                ],
+                correctAnswer: 1,
+                explanation: "Antes de la fase de expansión de banda ancha, en 2003 solo el 5% de los hogares urbanos tenían acceso a Internet. Tras el lanzamiento del proyecto 'Red de Información Boliviana' en 2006, que instaló fibra óptica en los corredores urbanos, la penetración aumentó hasta el 38% en 2015."
+            },
+            {
+                id: 10,
+                question: "Considerando lo mencionado en el texto, ¿cuál es el mensaje principal implícito del autor respecto a las soluciones para cerrar la brecha digital en Bolivia?",
+                options: [
+                    "Se necesita una combinación de políticas que incluyan subsidios, capacitación y fondos nacionales, con cooperación multisectorial.",
+                    "La brecha digital se cerrará automáticamente con la llegada del 5G.",
+                    "Solo el sector privado puede resolver la brecha digital.",
+                    "La solución es únicamente responsabilidad del gobierno."
+                ],
+                correctAnswer: 0,
+                explanation: "La sección de 'Desafíos futuros' y en la propuesta de cierre de la brecha digital, el autor señala explícitamente la necesidad de (i) incentivar la inversión privada mediante subsidios, (ii) promover la capacitación digital en escuelas y comunidades, y (iii) crear un fondo nacional para la expansión de la conectividad en zonas rurales, todo ello bajo una cooperación multisectorial entre gobierno, academia y sector privado."
+            },
+            {
+                id: 11,
+                question: "Basándose en la información proporcionada, ¿qué principio general se desprende de las soluciones propuestas para cerrar la brecha digital en Bolivia?",
+                options: [
+                    "La colaboración entre gobierno, academia y sector privado es esencial.",
+                    "Solo el gobierno debe invertir en infraestructura.",
+                    "La brecha digital no puede ser reducida.",
+                    "La solución es únicamente tecnológica."
+                ],
+                correctAnswer: 0,
+                explanation: "El artículo, en la sección de propuestas, sugiere combinar subsidios, incentivar la inversión privada y crear un fondo nacional, todo ello dentro de una estrategia de colaboración entre gobierno, academia y sector privado para expandir la conectividad en zonas rurales."
+            },
+            {
+                id: 12,
+                question: "Considerando lo mencionado en el texto, ¿cuál es la idea principal implícita que el autor desea transmitir sobre la evolución del Internet en Bolivia?",
+                options: [
+                    "Ha habido avances tecnológicos significativos, pero persisten desigualdades que requieren políticas integradas.",
+                    "Bolivia está a la vanguardia tecnológica mundial.",
+                    "La brecha digital se ha cerrado completamente.",
+                    "El desarrollo de Internet en Bolivia ha sido lento y sin avances significativos."
+                ],
+                correctAnswer: 0,
+                explanation: "Aunque se ha pasado de un enlace satelital de 64 kbps en 1995 a pruebas piloto de 5G en 2022, la brecha digital sigue siendo marcada: el INE reporta que en 2023 el 68% de los hogares rurales carecen de acceso fijo y la penetración rural de Internet es mucho menor que la urbana. Además, en la sección de desafíos futuros se propone una combinación de subsidios, capacitación y fondos nacionales para cerrar esa brecha."
+            },
+            {
+                id: 13,
+                question: "A partir de lo expuesto en el artículo, ¿cuál es la propuesta central del autor para reducir la brecha digital entre zonas urbanas y rurales en Bolivia?",
+                options: [
+                    "Una combinación de políticas: subsidios, capacitación digital y un fondo nacional.",
+                    "Solo implementar tecnología 5G en todas las áreas rurales.",
+                    "Esperar que el sector privado resuelva el problema espontáneamente.",
+                    "Limitar el acceso a Internet en zonas urbanas para equilibrar la brecha."
+                ],
+                correctAnswer: 0,
+                explanation: "'Para cerrar la brecha' el autor propone específicamente una combinación de políticas: subsidios a la inversión privada, capacitación digital y un fondo nacional dirigido a zonas rurales."
+            },
+            {
+                id: 14,
+                question: "Basándose en la información proporcionada, ¿qué es probable que ocurra en los próximos cinco años respecto a la cobertura de internet en áreas rurales de Bolivia?",
+                options: [
+                    "La cobertura mejorará gradualmente si se aplican políticas de subsidios e inversión, pero la brecha persistirá si no se enfoca específicamente en zonas rurales.",
+                    "La cobertura en áreas rurales alcanzará el 100% automáticamente.",
+                    "La brecha digital aumentará inevitablemente.",
+                    "Las áreas rurales quedarán completamente desconectadas."
+                ],
+                correctAnswer: 0,
+                explanation: "El artículo indica que, al cierre de 2024, se espera que el 20% de la población nacional tenga acceso a 5G, prioritariamente en zonas estratégicas de desarrollo económico, y que en 2023 el 68% de los hogares rurales carecían de acceso fijo a Internet. Además, se proponen políticas de subsidios e inversión en fibra óptica para reducir la brecha digital."
+            },
+            {
+                id: 15,
+                question: "De acuerdo con el texto, ¿cuál de las siguientes consecuencias es la más probable como resultado de la instalación de fibra óptica en los principales corredores urbanos entre 2006 y 2015?",
+                options: [
+                    "Aumento de la penetración de Internet en hogares urbanos del 5% al 38%.",
+                    "Disminución de la penetración de Internet en áreas urbanas.",
+                    "Aumento de la brecha digital entre áreas urbanas.",
+                    "Reducción de la inversión en infraestructura tecnológica."
+                ],
+                correctAnswer: 0,
+                explanation: "El texto indica que, antes de la expansión de la fibra, en 2003 solo el 5% de los hogares urbanos tenía acceso a Internet (fase dial up). Con el proyecto 'Red de Información Boliviana' iniciado en 2006, para 2012 la cobertura de fibra óptica alcanzó el 60% de la población urbana y los precios de los planes de 10 Mbps se redujeron a aproximadamente 15 dólares mensuales. Como consecuencia directa de esta mejora de infraestructura y costo, la penetración en hogares urbanos subió al 38% en 2015."
+            },
+            {
+                id: 16,
+                question: "¿Qué puede deducirse del texto respecto a la estrategia de expansión implementada por la empresa estatal Entel a través de la red 4G LTE?",
+                options: [
+                    "Sentó las bases para la futura implementación de 5G.",
+                    "Fue un fracaso que no logró mejorar la conectividad.",
+                    "Reemplazó completamente la necesidad de fibra óptica.",
+                    "Solo benefició a áreas rurales."
+                ],
+                correctAnswer: 0,
+                explanation: "Entel lanzó la red 4G LTE en 2016, proporcionando velocidades comparables a la banda ancha fija y mejorando la infraestructura móvil en áreas urbanas. Más adelante, menciona que en 2022 Bolivia licitó el espectro 3.5 GHz y que Viva Bolivia anunció una prueba piloto de 5G en Puerto Suárez, aprovechando la infraestructura móvil existente."
+            },
+            {
+                id: 17,
+                question: "El artículo señala que, considerando los datos estadísticos presentados, ¿cuál es el mensaje implícito principal respecto al desarrollo de la conectividad en Bolivia?",
+                options: [
+                    "Pese a los avances, persisten desigualdades que requieren políticas dirigidas a la inclusión universal.",
+                    "Bolivia ha logrado la inclusión digital completa.",
+                    "La brecha digital es un problema sin solución.",
+                    "Los avances tecnológicos han beneficiado por igual a todas las regiones."
+                ],
+                correctAnswer: 0,
+                explanation: "Pese a avances como la instalación de fibra óptica (cobertura del 60% urbano en 2012) y la prueba piloto de 5G en Puerto Suárez, aún persisten desigualdades: el INE reporta que en 2023 el 68% de los hogares rurales carecen de acceso fijo a Internet y la penetración rural es mucho menor que la urbana."
+            },
+            {
+                id: 18,
+                question: "El artículo señala que, a raíz de la expansión de la fibra óptica y la implementación de redes 4G/5G, se puede concluir que:",
+                options: [
+                    "La brecha digital entre áreas urbanas y rurales persiste.",
+                    "La brecha digital ha desaparecido completamente.",
+                    "Las áreas rurales tienen mejor conectividad que las urbanas.",
+                    "La fibra óptica no tuvo impacto en la conectividad."
+                ],
+                correctAnswer: 0,
+                explanation: "Tras la expansión de la fibra óptica (cobertura del 60% en áreas urbanas para 2012) y la llegada del 4G en 2016, la penetración urbana llegó al 38% en 2015, mientras que en zonas rurales solo alcanzó el 12%. Además, en 2023 el 68% de los hogares rurales carecían de acceso fijo a Internet. Estas cifras muestran que, pese a los avances tecnológicos, la brecha digital persiste."
+            },
+            {
+                id: 19,
+                question: "Considerando lo mencionado en el texto, ¿cuál es la idea principal implícita respecto a los resultados de la evolución del Internet en Bolivia?",
+                options: [
+                    "Hay avances significativos pero persisten brechas que requieren políticas públicas integrales.",
+                    "El desarrollo ha sido uniforme en todo el territorio.",
+                    "Los avances tecnológicos han resuelto todos los problemas de conectividad.",
+                    "Bolivia está rezagada tecnológicamente respecto al resto del mundo."
+                ],
+                correctAnswer: 0,
+                explanation: "El artículo describe avances tecnológicos (4G, fibra óptica, pruebas de 5G) y sus efectos positivos en educación y salud, pero también señala cifras que revelan una brecha digital persistente (por ejemplo, 68% de hogares rurales sin acceso fijo en 2023) y concluye con propuestas de políticas públicas, subsidios y colaboración entre sector público, privado y académico para cerrar esa brecha."
+            },
+            {
+                id: 20,
+                question: "¿Qué puede deducirse de la expansión de la red 5G en zonas estratégicas como Puerto Suárez?",
+                options: [
+                    "Favorecerá la adopción de servicios de telemedicina avanzados.",
+                    "Aumentará la brecha digital en esas zonas.",
+                    "No tendrá impacto en los servicios de salud.",
+                    "Solo beneficiará a empresas privadas."
+                ],
+                correctAnswer: 0,
+                explanation: "El artículo indica que la prueba piloto de 5G en Puerto Suárez conecta hospitales y universidades y menciona que la implementación de 5G 'abrirá la puerta a la cirugía a distancia y al uso de dispositivos de monitoreo en tiempo real'. De ahí se deduce que la expansión de 5G favorecerá la adopción de servicios de telemedicina avanzados en zonas que antes estaban aisladas."
+            },
+            {
+                id: 21,
+                question: "A partir de lo expuesto en el artículo, ¿qué principio general se puede inferir sobre el papel de los diferentes actores en la expansión de la conectividad en Bolivia?",
+                options: [
+                    "La cooperación entre instituciones académicas, gobierno y sector privado ha sido clave en diferentes etapas.",
+                    "Solo el sector privado ha impulsado la conectividad.",
+                    "El gobierno ha sido el único actor relevante.",
+                    "Las instituciones académicas no han tenido ningún papel."
+                ],
+                correctAnswer: 0,
+                explanation: "La primera conexión en 1995 fue gestionada por la Universidad Mayor de San Andrés con apoyo de la OEA; el proyecto RIB (2006‑2015) fue impulsado por el gobierno con financiamiento del BID; la red 4G fue lanzada por la empresa estatal Entel; la prueba piloto de 5G fue anunciada por Viva Bolivia; y en la sección de conclusiones se enfatiza la necesidad de cooperación entre instituciones académicas, gobierno y sector privado para cerrar la brecha digital."
+            },
+            {
+                id: 22,
+                question: "Según el artículo, la estimación de que el 20% de la población boliviana tendrá acceso a 5G para finales de 2024 debe evaluarse críticamente frente a la tendencia global de buscar una cobertura mayor del 50% en el mismo período; ¿cuál de las siguientes afirmaciones representa la valoración más adecuada de esta meta dentro del contexto boliviano?",
+                options: [
+                    "Es un paso progresivo realista, considerando la brecha digital existente y la concentración inicial en zonas estratégicas.",
+                    "Es una meta ambiciosa e irrealizable.",
+                    "Es una meta modesta que muestra el fracaso de Bolivia en telecomunicaciones.",
+                    "La meta debería ser del 100% para igualar a los países desarrollados."
+                ],
+                correctAnswer: 0,
+                explanation: "Para finales de 2024, se espera que el 20% de la población tenga acceso a 5G, concentrándose inicialmente en zonas estratégicas como Puerto Suárez donde se realizó la prueba piloto. Además, el texto menciona que la expansión de fibra óptica ya cubre gran parte de las áreas urbanas, lo que permite un despliegue complementario. Sin embargo, también se señala que en 2023 el 68% de los hogares rurales carecen de acceso fijo a Internet, evidenciando una brecha digital que sigue siendo un desafío; por ello la meta del 20% es un paso progresivo, no una cobertura total."
+            },
+            {
+                id: 23,
+                question: "El artículo señala que, según el INE, en 2023 el 68% de los hogares rurales carecen de acceso fijo a Internet. ¿Cuál de los siguientes posibles sesgos podría afectar la interpretación de este dato en el análisis del autor?",
+                options: [
+                    "Equiparar la ausencia de acceso fijo con la ausencia total de conectividad, ignorando que muchos hogares podrían usar conexiones móviles.",
+                    "Sobrestimar la conectividad rural.",
+                    "Ignorar que todos los hogares rurales tienen acceso fijo.",
+                    "Considerar que el acceso fijo es irrelevante para la conectividad."
+                ],
+                correctAnswer: 0,
+                explanation: "El artículo menciona el porcentaje del 68% de hogares rurales sin acceso fijo a Internet, pero no discute que muchos de esos hogares podrían estar usando Internet a través de conexiones móviles (3G/4G) que no requieren infraestructura fija. Esta ausencia constituye un sesgo de interpretación: equiparar la ausencia de acceso fijo con la ausencia total de conectividad."
+            },
+            {
+                id: 24,
+                question: "El artículo señala que la prueba piloto de 5G en Puerto Suárez conectó hospitales y universidades con aplicaciones de telemedicina y realidad aumentada. ¿Por qué es relevante esta información para la planificación de políticas públicas orientadas a reducir la brecha digital en zonas rurales?",
+                options: [
+                    "Evidencia que el 5G puede ofrecer servicios críticos (salud, educación) en zonas de difícil acceso, justificando su expansión como herramienta clave para reducir la brecha digital.",
+                    "Muestra que el 5G solo es útil en zonas urbanas.",
+                    "Indica que la telemedicina no es importante para zonas rurales.",
+                    "Demuestra que el 5G no tiene aplicaciones prácticas en salud y educación."
+                ],
+                correctAnswer: 0,
+                explanation: "El texto describe la prueba piloto de 5G en Puerto Suárez que conectó hospitales y universidades con aplicaciones de telemedicina y realidad aumentada, y en la sección de desafíos se menciona la persistente brecha digital entre zonas urbanas y rurales. Evidenciar que 5G puede ofrecer servicios críticos (salud, educación) en zonas de difícil acceso justifica que las políticas públicas consideren la expansión de esta tecnología como una herramienta clave para reducir esa brecha."
+            },
+            {
+                id: 25,
+                question: "Del análisis presentado se desprende que la afirmación del autor de que la implementación del 5G eliminará la brecha digital entre áreas urbanas y rurales es válida.",
+                options: [
+                    "Falso, porque el 5G inicialmente cubrirá solo zonas estratégicas y no resolverá por sí solo las desigualdades estructurales.",
+                    "Verdadero, porque el 5G es una tecnología superior que automáticamente resuelve todos los problemas de conectividad.",
+                    "Verdadero, porque el artículo afirma explícitamente que el 5G eliminará la brecha digital.",
+                    "Falso, porque el 5G no tiene ninguna ventaja sobre tecnologías anteriores."
+                ],
+                correctAnswer: 0,
+                explanation: "El texto señala que se espera que sólo el 20% de la población tenga acceso a 5G para finales de 2024, concentrado en zonas estratégicas de desarrollo económico, mientras que el INE reporta que el 68% de los hogares rurales carecen de acceso fijo a Internet en 2023. Además, se mencionan retos estructurales como la brecha digital y la necesidad de políticas de subsidios, lo que muestra que el argumento de que el 5G eliminará plenamente la brecha es insuficiente."
+            },
+            {
+                id: 26,
+                question: "A partir del análisis presentado respecto a las diferencias de acceso y uso del Internet entre distintos grupos de la población, ¿qué otro aspecto importante ha obviado el autor?",
+                options: [
+                    "Diferencias de acceso o uso entre hombres y mujeres (brecha de género).",
+                    "Diferencias entre grupos etarios.",
+                    "Diferencias entre personas con discapacidad y sin discapacidad.",
+                    "El autor ha considerado todos los aspectos relevantes."
+                ],
+                correctAnswer: 0,
+                explanation: "El artículo describe la evolución tecnológica, la expansión urbana rural y los impactos en educación y salud, nunca menciona diferencias de acceso o uso entre hombres y mujeres. No se hace referencia a estudios de género ni a datos desagregados por sexo, lo que indica una omisión del sesgo de género."
+            },
+            {
+                id: 27,
+                question: "Basándose en la información proporcionada, ¿cuál de las siguientes afirmaciones describe mejor la viabilidad de la meta boliviana de que el 20% de la población tenga acceso a 5G para finales de 2024, considerando la actual brecha digital entre áreas urbanas y rurales?",
+                options: [
+                    "Es una meta plausible porque se enfoca en áreas urbanas y estratégicas donde ya existe infraestructura, aunque la brecha rural persista.",
+                    "Es una meta imposible de alcanzar.",
+                    "Es una meta demasiado modesta que se superará fácilmente.",
+                    "La meta no tiene relación con la brecha digital."
+                ],
+                correctAnswer: 0,
+                explanation: "El artículo indica que para finales de 2024 se espera que el 20% de la población tenga acceso a 5G, 'especialmente en zonas estratégicas de desarrollo económico'. Asimismo, señala que el 68% de los hogares rurales carecen de acceso fijo a Internet. Dado que la proyección del 5G está enfocada en áreas urbanas y estratégicas donde ya existen redes y la infraestructura es más robusta, la meta del 20% resulta plausible pese a la significativa brecha rural."
+            },
+            {
+                id: 28,
+                question: "Basándose en la información proporcionada, ¿cuál de las siguientes perspectivas futuras no es considerada por el autor al proponer políticas para cerrar la brecha digital en Bolivia?",
+                options: [
+                    "La inclusión explícita de la visión o necesidades de los pueblos indígenas.",
+                    "La necesidad de capacitación digital.",
+                    "La importancia de subsidios a la inversión privada.",
+                    "La creación de un fondo nacional para expansión rural."
+                ],
+                correctAnswer: 0,
+                explanation: "Aunque el autor propone varias medidas para reducir la brecha digital (subsidios a la inversión privada, capacitación digital en escuelas y comunidades, y un fondo nacional para expansión rural), en ningún apartado del artículo se menciona la inclusión explícita de la visión o necesidades de los pueblos indígenas."
+            },
+            {
+                id: 29,
+                question: "Basándose en la información proporcionada, ¿qué combinación de medidas sería la más adecuada para reducir la brecha digital entre zonas rurales y urbanas en Bolivia en los próximos cinco años?",
+                options: [
+                    "Incentivar inversión privada mediante subsidios, promover capacitación digital y crear un fondo nacional para expansión rural.",
+                    "Solo implementar tecnología 5G en todo el país.",
+                    "Esperar que el mercado resuelva el problema espontáneamente.",
+                    "Limitar el acceso a Internet en zonas urbanas."
+                ],
+                correctAnswer: 0,
+                explanation: "La sección de 'Desafíos futuros' el artículo propone una combinación de políticas: incentivar la inversión privada mediante subsidios, promover la capacitación digital y crear un fondo nacional para la expansión de conectividad en zonas rurales."
+            },
+            {
+                id: 30,
+                question: "Según el artículo, la estimación de que el 20% de la población boliviana tendrá acceso a 5G para finales de 2024 debe evaluarse críticamente frente a la tendencia global de buscar una cobertura mayor del 50% en el mismo período; ¿cuál de las siguientes afirmaciones representa la valoración más adecuada de esta meta dentro del contexto boliviano?",
+                options: [
+                    "Es un paso progresivo realista, considerando las limitaciones de infraestructura y la necesidad de enfocarse inicialmente en zonas estratégicas.",
+                    "Es una muestra del fracaso absoluto de Bolivia en telecomunicaciones.",
+                    "Bolivia debería tener la misma meta que los países más desarrollados.",
+                    "La meta es demasiado alta para las capacidades bolivianas."
+                ],
+                correctAnswer: 0,
+                explanation: "Para finales de 2024, se espera que el 20% de la población tenga acceso a 5G, concentrándose inicialmente en zonas estratégicas como Puerto Suárez donde se realizó la prueba piloto. Además, el texto menciona que la expansión de fibra óptica ya cubre gran parte de las áreas urbanas, lo que permite un despliegue complementario. Sin embargo, también se señala que en 2023 el 68% de los hogares rurales carecen de acceso fijo a Internet, evidenciando una brecha digital que sigue siendo un desafío; por ello la meta del 20% es un paso progresivo, no una cobertura total."
+            }
+        ];
+
+        // Datos de las preguntas de Impacto de la digitalización
+        const digitalizationQuestions = [
+            {
+                id: 1,
+                question: "Basándose en la información proporcionada, ¿cuál es la consecuencia social inmediata que tuvo la campaña del hashtag #ReformaEducativa2022 descrita en el artículo?",
+                options: [
+                    "Una marcha con más de 5000 personas en la Plaza Murillo.",
+                    "La creación de un nuevo partido político.",
+                    "El cierre de la Universidad Mayor de San Andrés.",
+                    "La reducción de la matrícula universitaria."
+                ],
+                correctAnswer: 0,
+                explanation: "En la sección 'Movilización a través de plataformas digitales' del artículo se indica que el hashtag #ReformaEducativa2022 alcanzó más de 250000 interacciones y que la convocatoria resultó en una marcha en la Plaza Murillo con más de 5000 participantes."
+            },
+            {
+                id: 2,
+                question: "De acuerdo con el texto, ¿cuál es la diferencia porcentual entre el porcentaje de jóvenes que se sienten capaces de distinguir noticias reales en el Departamento de La Paz y el porcentaje de los jóvenes que lo hacen en Potosí?",
+                options: [
+                    "22 puntos porcentuales",
+                    "15 puntos porcentuales",
+                    "30 puntos porcentuales",
+                    "10 puntos porcentuales"
+                ],
+                correctAnswer: 0,
+                explanation: "El 76% de los jóvenes de La Paz declara sentirse capaz de distinguir noticias reales, mientras que en Potosí esa cifra es del 54%. La diferencia es 76% − 54% = 22 puntos porcentuales."
+            },
+            {
+                id: 3,
+                question: "La lectura del texto permite identificar que, según la teoría del 'Efecto de Red' citada en el apartado de movilización digital, ¿cuál es el segundo mecanismo que se menciona para explicar cómo las redes sociales favorecen la organización de protestas?",
+                options: [
+                    "La retroalimentación instantánea (likes, retweets) que refuerza la percepción de apoyo social.",
+                    "La difusión de información que facilita la creación de una identidad colectiva.",
+                    "El bajo costo de participación que reduce las barreras logísticas.",
+                    "La polarización de los grupos en conflicto."
+                ],
+                correctAnswer: 0,
+                explanation: "El segundo mecanismo es la retroalimentación instantánea (likes, retweets) que refuerza la percepción de apoyo social."
+            },
+            {
+                id: 4,
+                question: "El artículo señala que, comparando el porcentaje nacional de jóvenes que poseen un smartphone con el porcentaje de jóvenes en Potosí que se declaran capaces de distinguir noticias reales de falsas, ¿cuál es la diferencia porcentual entre ambos valores?",
+                options: [
+                    "35%",
+                    "33%",
+                    "41%",
+                    "30%"
+                ],
+                correctAnswer: 0,
+                explanation: "Según el texto, el 89% de los jóvenes bolivianos posee un smartphone y que en Potosí solo el 54% se siente capaz de distinguir noticias reales de falsas. La diferencia entre ambos porcentajes es 89% - 54% = 35%."
+            },
+            {
+                id: 5,
+                question: "A consecuencia del análisis presentado, ¿cómo define el artículo el concepto de participación simbólica?",
+                options: [
+                    "La expresión de opiniones y valores sin necesariamente traducirse en acción concreta.",
+                    "La participación en elecciones y votaciones.",
+                    "La afiliación a partidos políticos tradicionales.",
+                    "La asistencia a actos públicos y manifestaciones."
+                ],
+                correctAnswer: 0,
+                explanation: "El artículo define la participación simbólica como 'la expresión de opiniones y valores sin necesariamente traducirse en acción concreta'."
+            },
+            {
+                id: 6,
+                question: "Del análisis presentado se desprende que, según el artículo, ¿cómo se define el concepto de alfabetización digital?",
+                options: [
+                    "La capacidad de buscar, evaluar y utilizar la información digital de forma responsable.",
+                    "La habilidad para programar computadoras.",
+                    "El conocimiento sobre hardware de dispositivos electrónicos.",
+                    "La capacidad de usar todas las funciones de un smartphone."
+                ],
+                correctAnswer: 0,
+                explanation: "El artículo define la alfabetización digital como 'la capacidad de buscar, evaluar y utilizar la información digital de forma responsable' (UNESCO, 2022)."
+            },
+            {
+                id: 7,
+                question: "Del análisis presentado se desprende que la efectividad de la participación política de los jóvenes bolivianos depende principalmente de:",
+                options: [
+                    "La alfabetización digital y la capacidad de evaluar críticamente la información.",
+                    "La posesión de smartphones de última generación.",
+                    "El acceso ilimitado a redes sociales.",
+                    "La edad exacta de los jóvenes."
+                ],
+                correctAnswer: 0,
+                explanation: "El artículo indica que, aunque el 89% de los jóvenes posee un smartphone, la alfabetización digital sigue siendo desigual y es clave para evitar la apatía política. Además, las conclusiones recomiendan implementar programas de alfabetización digital en todos los niveles escolares para que los jóvenes puedan evaluar críticamente la información y participar de forma efectiva."
+            },
+            {
+                id: 8,
+                question: "La lectura del texto permite identificar que, al comparar el proyecto 'Voces del Chaco' con la campaña Reforma Educativa 2022, ¿cuál es la diferencia principal en el uso de los medios digitales para la participación política de los jóvenes en temas ambientales?",
+                options: [
+                    "'Voces del Chaco' se centra en participación simbólica (podcasts que generan debate), mientras que #ReformaEducativa2022 organizó una movilización física.",
+                    "Ambas son exactamente iguales en objetivos y métodos.",
+                    "'Voces del Chaco' organizó una marcha masiva, mientras que #ReformaEducativa2022 solo generó debate en línea.",
+                    "Ninguna de las dos usó medios digitales de forma efectiva."
+                ],
+                correctAnswer: 0,
+                explanation: "El artículo describe que 'Voces del Chaco' consiste en una serie de podcasts compartidos en Instagram que generan debates sobre conservación ambiental y justicia social, es decir, una forma de participación simbólica centrada en temas ambientales. En contraste, la campaña #ReformaEducativa2022 se menciona como un caso de movilización digital donde un hashtag en Twitter y TikTok organizó una marcha presencial de más de 5000 personas."
+            },
+            {
+                id: 9,
+                question: "Del análisis presentado se desprende que, en comparación con la movilización física derivada del hashtag #ReformaEducativa2022, la iniciativa 'Voces del Chaco' se caracteriza principalmente por:",
+                options: [
+                    "Ser una forma de participación simbólica que no necesariamente se traduce en acción presencial.",
+                    "Organizar protestas masivas en las calles.",
+                    "No utilizar plataformas digitales.",
+                    "Tener un impacto político inmediato y directo."
+                ],
+                correctAnswer: 0,
+                explanation: "El texto describe a 'Voces del Chaco' como una serie de podcasts que generan debates y expresan opiniones de forma creativa, es decir, una forma de participación simbólica que no se traduce necesariamente en acciones presenciales, a diferencia del caso del hashtag #ReformaEducativa2022, cuya movilización digital resultó en una marcha con más de 5000 personas."
+            },
+            {
+                id: 10,
+                question: "Del análisis presentado se desprende que, debido al bajo costo de la participación digital descrito en la movilización #ReformaEducativa2022, es probable que:",
+                options: [
+                    "Los jóvenes ejerzan mayor presión para que el Estado invierta en infraestructura digital, generando beneficios económicos.",
+                    "La participación política de los jóvenes disminuya.",
+                    "El costo de los smartphones aumente.",
+                    "Las redes sociales dejen de ser utilizadas para movilización."
+                ],
+                correctAnswer: 0,
+                explanation: "La digitalización permite una movilización rápida y de bajo costo y que, para que el impacto sea positivo, se requieren políticas que fomenten la transparencia y la infraestructura digital. De manera implícita, el bajo costo de participar genera mayor presión de los jóvenes para que el Estado invierta en infraestructura digital, lo cual puede traducirse en beneficios económicos al ampliar el acceso a información y herramientas digitales."
+            },
+            {
+                id: 11,
+                question: "Considerando lo mencionado en el texto, ¿cómo se diferencian los efectos de la digitalización en la movilización política de los jóvenes en la Universidad Mayor de San Andrés (UMSA) y en la región del Beni?",
+                options: [
+                    "En la UMSA facilitó una movilización masiva y coordinada, mientras que en el Beni generó fragmentación y polarización.",
+                    "En ambos casos generó exactamente los mismos efectos positivos.",
+                    "En la UMSA generó polarización, mientras que en el Beni facilitó consensos.",
+                    "En ninguno de los dos casos tuvo impacto significativo."
+                ],
+                correctAnswer: 0,
+                explanation: "El caso de la UMSA mostró una movilización rápida y masiva con el hashtag #ReformaEducativa2022, alcanzando más de 250.000 interacciones y una marcha de 5,000 personas, lo que ejemplifica el 'efecto de red' descrito. En la región del Beni, por otro lado, el artículo indica que grupos rivales usaron WhatsApp para difundir mensajes polarizadores que dificultan la construcción de consensos, generando fragmentación y limitando la movilización colectiva."
+            },
+            {
+                id: 12,
+                question: "El artículo señala que, al comparar la movilización a través de plataformas digitales con la expresión simbólica en redes sociales, la consecuencia social más distintiva para la participación política juvenil es que:",
+                options: [
+                    "La movilización digital puede traducirse en acción colectiva concreta, mientras la expresión simbólica tiene un impacto principalmente en el ámbito del discurso y la identidad.",
+                    "Ambas tienen exactamente las mismas consecuencias.",
+                    "La expresión simbólica tiene mayor impacto político que la movilización digital.",
+                    "Solo la movilización digital es relevante para la participación política."
+                ],
+                correctAnswer: 0,
+                explanation: "El texto describe que la movilización a través de plataformas digitales, como el caso del hashtag #ReformaEducativa2022, llevó a una protesta física con más de 5 000 personas, lo que demuestra una traducción de la actividad en línea a acción colectiva concreta. Por otro lado, en la sección de 'Nuevas formas de expresión y participación simbólica' se indica que los memes, videos y podcasts fomentan el sentido de pertenencia y habilidades de comunicación, pero señala que 'la medida en que estas actividades se traducen en cambios políticos concretos sigue siendo objeto de investigación'."
+            },
+            {
+                id: 13,
+                question: "Basándose en la información proporcionada, ¿cuál es la conclusión más probable sobre el efecto histórico de la expansión digital en la participación política de los jóvenes bolivianos entre 2013 y 2022?",
+                options: [
+                    "La expansión digital por sí sola no asegura un aumento generalizado de la participación; esta mejora sustancialmente solo donde la alfabetización digital se ha reforzado.",
+                    "La expansión digital automáticamente aumentó la participación política de todos los jóvenes por igual.",
+                    "La participación política disminuyó a pesar de la expansión digital.",
+                    "No hay relación entre expansión digital y participación política."
+                ],
+                correctAnswer: 0,
+                explanation: "El texto indica que el acceso a Internet en hogares pasó del 34% en 2013 al 71% en 2022 y que el 89% de los jóvenes posee un smartphone, evidenciando una expansión tecnológica importante. Sin embargo, la calidad de la participación varía: en La Paz el 76% de los jóvenes se siente capaz de distinguir noticias reales de falsas, mientras que en Potosí esa cifra es solo 54%. Además, la exposición a 'fake news' está asociada a una reducción del 12% en la probabilidad de votar."
+            },
+            {
+                id: 14,
+                question: "A partir de lo expuesto en el artículo, ¿cuál es la perspectiva futura que el autor sugiere para potenciar la participación política de los jóvenes bolivianos?",
+                options: [
+                    "Programas de alfabetización digital, políticas de transparencia institucional y apoyo a contenidos juveniles que integren investigación académica.",
+                    "Restringir el acceso a redes sociales para evitar desinformación.",
+                    "Eliminar la educación digital de las escuelas.",
+                    "Concentrar todos los esfuerzos en la compra de dispositivos tecnológicos."
+                ],
+                correctAnswer: 0,
+                explanation: "En la sección de conclusiones el autor propone tres líneas de acción futuras: (1) programas de alfabetización digital en todos los niveles escolares, (2) políticas públicas que fomenten la transparencia y faciliten la participación online mediante plataformas seguras, y (3) apoyo a iniciativas de contenido juvenil que integren investigación académica con formatos digitales."
+            },
+            {
+                id: 15,
+                question: "De acuerdo con el texto, ¿qué es probable que ocurra si la producción y difusión de contenidos juveniles sobre temas ambientales, como el proyecto 'Voces del Chaco' se intensifica en las redes sociales?",
+                options: [
+                    "Se reforzará la inserción de la perspectiva juvenil en la agenda pública y ejercerá presión para que las instituciones consideren políticas de conservación.",
+                    "Disminuirá el interés de los jóvenes en temas ambientales.",
+                    "No tendrá ningún impacto en las políticas públicas.",
+                    "Provocará el rechazo total de la comunidad académica."
+                ],
+                correctAnswer: 0,
+                explanation: "El artículo indica que el proyecto 'Voces del Chaco' ha generado debates entre la comunidad académica y ONG, facilitando la inserción de la perspectiva juvenil en la agenda pública. Por lo tanto, ampliar la producción y difusión de contenidos similares plausiblemente reforzará esa inserción y ejercerá presión para que las instituciones consideren políticas de conservación."
+            },
+            {
+                id: 16,
+                question: "La lectura del texto permite identificar que, al comparar la campaña ReformaEducativa2022 conducida por la UMSA con el uso de WhatsApp en el Beni, la diferencia esencial radica en:",
+                options: [
+                    "La campaña de la UMSA generó identificación colectiva y acción física, mientras que en el Beni hubo fragmentación y polarización.",
+                    "Ambas generaron exactamente los mismos resultados.",
+                    "La campaña de la UMSA fue un fracaso, mientras que en el Beni fue exitosa.",
+                    "Solo la campaña de la UMSA utilizó medios digitales."
+                ],
+                correctAnswer: 0,
+                explanation: "El texto describe que la campaña #ReformaEducativa2022, difundida mediante el hashtag en Twitter y TikTok, logró más de 250 000 interacciones y movilizó a más de 5 000 personas en una marcha, evidenciando una identificación colectiva y acción física. En contraste, el párrafo sobre el Beni señala que grupos rivales usan WhatsApp para difundir mensajes polarizadores que dificultan la construcción de consensos, indicando un efecto de fragmentación y polarización."
+            },
+            {
+                id: 17,
+                question: "De acuerdo con el texto, ¿qué principio general se puede extraer sobre la relación entre la digitalización y la participación política de los jóvenes bolivianos?",
+                options: [
+                    "La mera posesión de dispositivos no garantiza participación crítica; la alfabetización digital es clave.",
+                    "A mayor posesión de smartphones, mayor participación política automáticamente.",
+                    "La digitalización reduce inevitablemente la participación política.",
+                    "Solo los jóvenes sin smartphones participan activamente en política."
+                ],
+                correctAnswer: 0,
+                explanation: "El artículo indica que, aunque el 89% de los jóvenes posee un smartphone y el 68% usa internet cotidianamente, la mera posesión no garantiza participación crítica; la alfabetización digital, definida como la capacidad de buscar, evaluar y usar información digital responsablemente, sigue siendo desigual y se señala como factor clave para que la digitalización no se traduzca en apatía política."
+            },
+            {
+                id: 18,
+                question: "La lectura del texto permite identificar que, si se implementan a nivel nacional programas de alfabetización digital dirigidos a jóvenes de entre 17 y 19 años, es probable que…",
+                options: [
+                    "Aumente la habilidad de distinguir información falsa y se mitigue la caída del 12% en la intención de voto.",
+                    "Disminuya el uso de smartphones entre los jóvenes.",
+                    "Aumente la exposición a noticias falsas.",
+                    "No tenga ningún efecto en la participación política."
+                ],
+                correctAnswer: 0,
+                explanation: "El artículo señala que el 89% de los jóvenes poseía un smartphone, pero la alfabetización digital es desigual (76% en La Paz versus 54% en Potosí) y que la exposición a 'fake news' está vinculada a una reducción del 12% en la probabilidad de votar. Asimismo, se recomienda implementar programas de alfabetización digital para mejorar la capacidad crítica."
+            },
+            {
+                id: 19,
+                question: "Según el artículo, ¿qué es probable que ocurra si se implementan programas de alfabetización digital extensivos en todas las escuelas de Bolivia?",
+                options: [
+                    "Aumentará la participación electoral juvenil al mitigar los efectos de la desinformación.",
+                    "Disminuirá el uso de redes sociales.",
+                    "Aumentará la exposición a noticias falsas.",
+                    "No tendrá impacto en la participación política."
+                ],
+                correctAnswer: 0,
+                explanation: "El artículo subraya que la alfabetización digital es clave para que la digitalización no conduzca a apatía política; menciona que la exposición a 'fake news' reduce la intención de voto en un 12% y que mejorar la capacidad de evaluar la veracidad de la información debería revertir esa tendencia, incrementando la participación electoral."
+            },
+            {
+                id: 20,
+                question: "Basándose en la información proporcionada, ¿qué principio general puede inferirse sobre el papel de los jóvenes bolivianos como actores en la participación política digital?",
+                options: [
+                    "Actúan como catalizadores que coordinan acciones colectivas y crean discursos digitales.",
+                    "Son meros receptores pasivos de información política.",
+                    "No utilizan medios digitales para participación política.",
+                    "Solo participan a través de canales tradicionales."
+                ],
+                correctAnswer: 0,
+                explanation: "El artículo muestra dos casos específicos: la movilización de estudiantes de la UMSA mediante el hashtag #ReformaEducativa2022, que evidencia la capacidad de los jóvenes para organizar protestas masivas, y el proyecto 'Voces del Chaco', que ilustra la generación de contenido simbólico (podcasts) que inserta sus perspectivas en la agenda pública."
+            },
+            {
+                id: 21,
+                question: "Basándose en la información proporcionada, ¿qué diferencia económica se puede inferir entre la movilización digital de los jóvenes mediante hashtags y la exposición a noticias falsas en relación con su potencial efecto sobre la participación electoral?",
+                options: [
+                    "La movilización digital puede aumentar la influencia económica de los jóvenes al impactar políticas públicas, mientras que la exposición a noticias falsas reduce su capacidad de influir económicamente.",
+                    "Ambas aumentan la influencia económica de los jóvenes.",
+                    "Ambas reducen la influencia económica de los jóvenes.",
+                    "No hay relación entre estos factores y la economía."
+                ],
+                correctAnswer: 0,
+                explanation: "El texto describe que el hashtag #ReformaEducativa2022 movilizó a más de 5000 personas y alcanzó 250000 interacciones, lo que evidencia una capacidad de generar participación política concreta; esa participación puede traducirse en una mayor influencia económica de los jóvenes al impactar decisiones de políticas públicas. En contraste, el artículo indica que la exposición a noticias falsas está vinculada a una reducción del 12% en la probabilidad de voto, lo que implica una menor capacidad de influir económicamente en los procesos electorales."
+            },
+            {
+                id: 22,
+                question: "Del análisis presentado se desprende que la principal fortaleza del enfoque metodológico del artículo radica en:",
+                options: [
+                    "La combinación de datos cuantitativos (estadísticas) con casos de estudio cualitativos concretos.",
+                    "Basarse únicamente en opiniones personales del autor.",
+                    "Usar solo datos oficiales del gobierno.",
+                    "Ignorar completamente el contexto boliviano."
+                ],
+                correctAnswer: 0,
+                explanation: "El artículo utiliza estadísticas de la Encuesta Nacional de Jóvenes 2022 y del INE (por ejemplo, el 89% de jóvenes con smartphone) junto con casos de estudio concretos como la campaña #ReformaEducativa2022 de la UMSA y el proyecto 'Voces del Chaco'. Esta mezcla de fuentes cuantitativas y cualitativas brinda triangulación y contextualiza los resultados."
+            },
+            {
+                id: 23,
+                question: "El artículo señala que la digitalización puede revitalizar la democracia boliviana siempre que se acompañe de políticas de alfabetización digital; ¿qué tan válido es este argumento según la información presentada?",
+                options: [
+                    "Válido, porque la alfabetización digital está vinculada a una mayor intención de participar políticamente.",
+                    "Inválido, porque no hay relación entre digitalización y democracia.",
+                    "Válido solo para países desarrollados, no para Bolivia.",
+                    "Inválido, porque la alfabetización digital reduce la participación política."
+                ],
+                correctAnswer: 0,
+                explanation: "En la sección de conclusiones el autor afirma que la digitalización ofrece una oportunidad histórica para revitalizar la democracia, siempre que se acompañe de políticas que promuevan el pensamiento crítico y la alfabetización digital. Además, en el apartado sobre alfabetización digital se muestra que la capacidad de distinguir noticias reales de falsas está vinculada a una mayor intención de participar, lo que respalda la relación entre alfabetización y participación política."
+            },
+            {
+                id: 24,
+                question: "De acuerdo con el texto, ¿cuál de las siguientes limitaciones o sesgos no está contemplado en las soluciones propuestas por los autores?",
+                options: [
+                    "Medidas concretas para ampliar la infraestructura de conectividad en zonas rurales.",
+                    "La necesidad de alfabetización digital.",
+                    "La importancia de la transparencia institucional.",
+                    "El apoyo a la producción de contenido juvenil."
+                ],
+                correctAnswer: 0,
+                explanation: "El artículo reconoce desigualdades en acceso a internet según la ubicación geográfica, las tres líneas de acción propuestas en la conclusión se centran en alfabetización digital, transparencia institucional y apoyo a contenidos juveniles, sin mencionar medidas concretas para ampliar la infraestructura de conectividad en zonas rurales."
+            },
+            {
+                id: 25,
+                question: "De acuerdo con el texto, ¿qué tipo de evidencia sería más pertinente para reforzar la afirmación de que los programas de alfabetización digital aumentan la intención de voto entre los jóvenes bolivianos?",
+                options: [
+                    "Evidencia experimental que controle variables y mida cambios en la intención de voto antes y después de la intervención.",
+                    "Opiniones personales de expertos en tecnología.",
+                    "Datos históricos de participación electoral sin intervención.",
+                    "Testimonios anecdóticos de jóvenes activistas."
+                ],
+                correctAnswer: 0,
+                explanation: "El texto señala que la alfabetización digital es clave para que la digitalización no genere apatía política, pero la evidencia presentada es mayormente correlacional (por ejemplo, diferencias entre La Paz y Potosí). Para demostrar que los programas de alfabetización incrementan la intención de voto, se requeriría evidencia experimental que controle variables y mida cambios en la intención de voto antes y después de la intervención."
+            },
+            {
+                id: 26,
+                question: "De acuerdo con el texto, ¿por qué es relevante implementar programas de alfabetización digital en las escuelas bolivianas para mejorar la participación política de los jóvenes?",
+                options: [
+                    "Porque desarrollan la capacidad de buscar, evaluar y usar información digital, lo que mitiga la desinformación y favorece una participación más informada y activa.",
+                    "Porque enseñan a los jóvenes a programar computadoras.",
+                    "Porque obligan a los jóvenes a usar redes sociales.",
+                    "Porque reemplazan la educación cívica tradicional."
+                ],
+                correctAnswer: 0,
+                explanation: "El artículo señala que, aunque el 89% de los jóvenes posee smartphone, la alfabetización digital sigue siendo desigual (76% en La Paz vs 54% en Potosí) y que la exposición a noticias falsas reduce en un 12% la probabilidad de voto. Por lo tanto, programas educativos que desarrollen la capacidad de buscar, evaluar y usar información digital son esenciales para mitigar la desinformación y favorecer una participación política más informada y activa."
+            },
+            {
+                id: 27,
+                question: "Considerando lo mencionado en el texto, ¿qué sesgo económico está presente en el enfoque del autor al analizar la digitalización y la participación política de los jóvenes bolivianos?",
+                options: [
+                    "No aborda explícitamente cómo la situación socioeconómica afecta el acceso y la calidad de la participación digital.",
+                    "Sobrestima el costo de los smartphones.",
+                    "Ignora completamente el aspecto económico.",
+                    "Asume que todos los jóvenes tienen igual acceso económico a la tecnología."
+                ],
+                correctAnswer: 0,
+                explanation: "El artículo indica que el 89% de los jóvenes posee un smartphone y menciona diferencias geográficas y educativas, no aborda explícitamente cómo la situación socio económica (ingresos familiares, capacidad de pago de planes de datos, etc.) afecta el acceso y la calidad de la participación digital. Esta omisión constituye un sesgo económico."
+            },
+            {
+                id: 28,
+                question: "Del análisis presentado se desprende que, en contraste con la concepción tradicional de que la defensa ambiental depende principalmente de acciones de campo, ¿qué afirma el artículo sobre el papel de iniciativas digitales como los podcasts 'Voces del Chaco' en la influencia de políticas medioambientales?",
+                options: [
+                    "Pueden facilitar la inserción de la perspectiva juvenil en la agenda pública, aunque su traducción en cambios políticos concretos requiere más investigación.",
+                    "No tienen ningún valor para la defensa ambiental.",
+                    "Reemplazan completamente las acciones de campo.",
+                    "Garantizan cambios políticos inmediatos."
+                ],
+                correctAnswer: 0,
+                explanation: "La sección 'Nuevas formas de expresión y participación simbólica' se describe que el proyecto 'Voces del Chaco' ha generado debates y ha facilitado la inserción de la perspectiva juvenil en la agenda pública, pero el artículo también señala que la medida en que estas actividades se traduzcan en cambios políticos concretos sigue siendo objeto de investigación."
+            },
+            {
+                id: 29,
+                question: "A partir de lo expuesto en el artículo, ¿cuáles son las principales implicaciones éticas y sociales que deben considerarse al diseñar programas de alfabetización digital dirigidos a los jóvenes bolivianos para fortalecer su participación política?",
+                options: [
+                    "Reducir la brecha de acceso entre regiones, proteger a los jóvenes de la manipulación de información y asegurar la inclusión digital.",
+                    "Enseñar solo habilidades técnicas de uso de dispositivos.",
+                    "Ignorar las diferencias regionales en acceso a tecnología.",
+                    "Fomentar el uso indiscriminado de redes sociales sin criterio."
+                ],
+                correctAnswer: 0,
+                explanation: "El artículo subraya que la digitalización solo favorece la participación política si se acompañan políticas de alfabetización digital que incluyan pensamiento crítico, inclusión digital y medidas contra la desinformación. Además, señala la necesidad de reducir la brecha de acceso entre regiones como La Paz y Potosí y de proteger a los jóvenes de la manipulación de información."
+            },
+            {
+                id: 30,
+                question: "De acuerdo con el texto, ¿cuáles son las implicaciones éticas más relevantes de la desigualdad en alfabetización digital entre los jóvenes de La Paz y Potosí para la calidad de la participación política?",
+                options: [
+                    "La falta de alfabetización digital expone a ciertos jóvenes a desinformación, lo que afecta su intención de participar y vulnera el principio de igualdad democrática.",
+                    "No hay implicaciones éticas significativas.",
+                    "Solo afecta el uso de redes sociales para entretenimiento.",
+                    "Beneficia a los jóvenes de La Paz en detrimento de los de Potosí."
+                ],
+                correctAnswer: 0,
+                explanation: "El texto señala que en La Paz el 76% de los jóvenes se siente capaz de distinguir noticias reales de falsas, mientras que en Potosí esa cifra cae al 54%. Además, se menciona que la exposición a 'fake news' está vinculada a una reducción del 12% en la probabilidad de votar. Esta combinación indica una vulnerabilidad ética: la falta de alfabetización digital expone a ciertos jóvenes a desinformación, lo que afecta su intención de participar y vulnera el principio de igualdad democrática."
+            }
+        ];
+
+        // Variables de estado de la aplicación
+        let currentDiscipline = '';
+        let currentMode = 'exam';
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let examResults = [];
+        let isReviewMode = false;
+
+        // Elementos del DOM
+        const mainMenu = document.getElementById('main-menu');
+        const subMenu = document.getElementById('sub-menu');
+        const examScreen = document.getElementById('exam-screen');
+        const resultScreen = document.getElementById('result-screen');
+        
+        const examInfo = document.getElementById('exam-info');
+        const submenuTitle = document.getElementById('submenu-title');
+        const examTitle = document.getElementById('exam-title');
+        const questionCounter = document.getElementById('question-counter');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const feedback = document.getElementById('feedback');
+        const feedbackContent = document.getElementById('feedback-content');
+        
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        
+        const resultDiscipline = document.getElementById('result-discipline');
+        const scorePercent = document.getElementById('score-percent');
+        const correctCount = document.getElementById('correct-count');
+        const incorrectCount = document.getElementById('incorrect-count');
+        const reviewList = document.getElementById('review-list');
+        
+        // Botones del menú principal
+        document.getElementById('biology-btn').addEventListener('click', () => {
+            currentDiscipline = 'biology';
+            showSubMenu('Biología');
+        });
+        
+        document.getElementById('history-btn').addEventListener('click', () => {
+            currentDiscipline = 'history';
+            showSubMenu('Historia y evolución del Internet en Bolivia');
+        });
+        
+        document.getElementById('digital-btn').addEventListener('click', () => {
+            currentDiscipline = 'digital';
+            showSubMenu('Impacto de la digitalización');
+        });
+        
+        // Botones del submenú
+        document.getElementById('simulacro-btn').addEventListener('click', () => {
+            isReviewMode = false;
+            startExam();
+        });
+        
+        document.getElementById('repaso-btn').addEventListener('click', () => {
+            isReviewMode = true;
+            startExam();
+        });
+        
+        document.getElementById('back-to-main').addEventListener('click', showMainMenu);
+        document.getElementById('restart-exam').addEventListener('click', restartExam);
+        document.getElementById('back-to-main-from-result').addEventListener('click', showMainMenu);
+        
+        // Navegación del examen
+        prevBtn.addEventListener('click', showPreviousQuestion);
+        nextBtn.addEventListener('click', showNextQuestion);
+        submitBtn.addEventListener('click', finishExam);
+        
+        // Funciones de la aplicación
+        function showMainMenu() {
+            mainMenu.classList.remove('hidden');
+            mainMenu.classList.add('visible');
+            subMenu.classList.remove('visible');
+            subMenu.classList.add('hidden');
+            examScreen.classList.remove('visible');
+            examScreen.classList.add('hidden');
+            resultScreen.classList.remove('visible');
+            resultScreen.classList.add('hidden');
+        }
+        
+        function showSubMenu(disciplineName) {
+            mainMenu.classList.remove('visible');
+            mainMenu.classList.add('hidden');
+            subMenu.classList.remove('hidden');
+            subMenu.classList.add('visible');
+            examScreen.classList.remove('visible');
+            examScreen.classList.add('hidden');
+            resultScreen.classList.remove('visible');
+            resultScreen.classList.add('hidden');
+            
+            submenuTitle.textContent = `¿Cómo deseas estudiar ${disciplineName}?`;
+            
+            // Actualizar información del examen
+            const questions = getQuestions();
+            examInfo.textContent = `Esta disciplina contiene ${questions.length} preguntas. Elige 'Repasar con ayuda' para ver explicaciones después de cada respuesta, o 'Dar examen simulacro' para un examen cronometrado.`;
+            
+            // Establecer color del botón según la disciplina
+            const simulacroBtn = document.getElementById('simulacro-btn');
+            const repasoBtn = document.getElementById('repaso-btn');
+            
+            simulacroBtn.className = 'menu-btn';
+            repasoBtn.className = 'menu-btn';
+            
+            if (currentDiscipline === 'biology') {
+                simulacroBtn.classList.add('biology');
+                repasoBtn.classList.add('biology');
+            } else if (currentDiscipline === 'history') {
+                simulacroBtn.classList.add('history');
+                repasoBtn.classList.add('history');
+            } else if (currentDiscipline === 'digital') {
+                simulacroBtn.classList.add('digital');
+                repasoBtn.classList.add('digital');
+            }
+        }
+        
+        function startExam() {
+            // Inicializar variables para el examen
+            currentQuestionIndex = 0;
+            userAnswers = new Array(getQuestions().length).fill(null);
+            examResults = [];
+            
+            // Configurar título según el modo
+            examTitle.textContent = isReviewMode ? 'Repaso con Ayuda' : 'Simulacro de Examen';
+            
+            // Mostrar pantalla de examen
+            subMenu.classList.remove('visible');
+            subMenu.classList.add('hidden');
+            examScreen.classList.remove('hidden');
+            examScreen.classList.add('visible');
+            resultScreen.classList.remove('visible');
+            resultScreen.classList.add('hidden');
+            
+            // Aplicar color al botón de reinicio según la disciplina
+            const restartBtn = document.getElementById('restart-exam');
+            restartBtn.className = 'menu-btn';
+            if (currentDiscipline === 'biology') {
+                restartBtn.classList.add('biology');
+            } else if (currentDiscipline === 'history') {
+                restartBtn.classList.add('history');
+            } else if (currentDiscipline === 'digital') {
+                restartBtn.classList.add('digital');
+            }
+            
+            // Mostrar primera pregunta
+            showCurrentQuestion();
+        }
+        
+        function getQuestions() {
+            switch(currentDiscipline) {
+                case 'biology':
+                    return biologyQuestions;
+                case 'history':
+                    return historyQuestions;
+                case 'digital':
+                    return digitalizationQuestions;
+                default:
+                    return [];
+            }
+        }
+        
+        function getDisciplineName() {
+            switch(currentDiscipline) {
+                case 'biology':
+                    return 'Biología';
+                case 'history':
+                    return 'Historia y evolución del Internet en Bolivia';
+                case 'digital':
+                    return 'Impacto de la digitalización';
+                default:
+                    return '';
+            }
+        }
+        
+        function showCurrentQuestion() {
+            const questions = getQuestions();
+            
+            if (questions.length === 0) {
+                alert('Esta disciplina no tiene preguntas configuradas.');
+                showMainMenu();
+                return;
+            }
+            
+            const question = questions[currentQuestionIndex];
+            
+            // Actualizar contador de preguntas
+            questionCounter.textContent = `Pregunta ${currentQuestionIndex + 1} de ${questions.length}`;
+            
+            // Mostrar texto de la pregunta
+            questionText.textContent = `${currentQuestionIndex + 1}. ${question.question}`;
+            
+            // Limpiar opciones anteriores
+            optionsContainer.innerHTML = '';
+            
+            // Crear y mostrar opciones
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.classList.add('option');
+                optionElement.textContent = `${String.fromCharCode(65 + index)}) ${option}`;
+                
+                // Marcar si ya se seleccionó esta opción
+                if (userAnswers[currentQuestionIndex] === index) {
+                    optionElement.classList.add('selected');
+                    
+                    // En el modo repaso, marcar si es correcta o incorrecta
+                    if (isReviewMode) {
+                        if (index === question.correctAnswer) {
+                            optionElement.classList.add('correct');
+                        } else {
+                            optionElement.classList.add('incorrect');
+                        }
+                    }
+                }
+                
+                // En el modo repaso, también mostrar la respuesta correcta
+                if (isReviewMode && index === question.correctAnswer && userAnswers[currentQuestionIndex] !== index) {
+                    optionElement.classList.add('correct');
+                }
+                
+                optionElement.addEventListener('click', () => {
+                    if (!isReviewMode || (isReviewMode && userAnswers[currentQuestionIndex] === null)) {
+                        selectOption(index);
+                    }
+                });
+                
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Mostrar u ocultar botones de navegación
+            prevBtn.classList.toggle('hidden', currentQuestionIndex === 0);
+            
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.classList.add('hidden');
+                submitBtn.classList.remove('hidden');
+            } else {
+                nextBtn.classList.remove('hidden');
+                submitBtn.classList.add('hidden');
+            }
+            
+            // En el modo repaso, mostrar el sustento después de responder
+            if (isReviewMode && userAnswers[currentQuestionIndex] !== null) {
+                feedbackContent.textContent = question.explanation;
+                feedback.classList.remove('hidden');
+                feedback.classList.add('visible');
+                
+                // Aplicar clase según si la respuesta fue correcta o incorrecta
+                if (userAnswers[currentQuestionIndex] === question.correctAnswer) {
+                    feedback.classList.remove('incorrect-answer');
+                    feedback.classList.add('correct-answer');
+                } else {
+                    feedback.classList.remove('correct-answer');
+                    feedback.classList.add('incorrect-answer');
+                }
+            } else {
+                feedback.classList.remove('visible');
+                feedback.classList.add('hidden');
+            }
+        }
+        
+        function selectOption(optionIndex) {
+            const questions = getQuestions();
+            const question = questions[currentQuestionIndex];
+            
+            // Guardar respuesta del usuario
+            userAnswers[currentQuestionIndex] = optionIndex;
+            
+            // En el modo repaso, mostrar feedback inmediatamente
+            if (isReviewMode) {
+                // Guardar resultado para mostrar después
+                const isCorrect = optionIndex === question.correctAnswer;
+                examResults[currentQuestionIndex] = {
+                    question: question.question,
+                    userAnswer: question.options[optionIndex],
+                    correctAnswer: question.options[question.correctAnswer],
+                    isCorrect: isCorrect,
+                    explanation: question.explanation
+                };
+                
+                // Mostrar la pregunta con el feedback
+                showCurrentQuestion();
+            }
+            
+            // En el modo examen, avanzar automáticamente a la siguiente pregunta
+            if (!isReviewMode && currentQuestionIndex < questions.length - 1) {
+                setTimeout(() => {
+                    currentQuestionIndex++;
+                    showCurrentQuestion();
+                }, 300);
+            } else if (!isReviewMode) {
+                // Si es la última pregunta, mostrar el botón de finalizar
+                showCurrentQuestion();
+            }
+        }
+        
+        function showPreviousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showCurrentQuestion();
+            }
+        }
+        
+        function showNextQuestion() {
+            const questions = getQuestions();
+            
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                showCurrentQuestion();
+            }
+        }
+        
+        function finishExam() {
+            const questions = getQuestions();
+            
+            // Calcular resultados si estamos en modo examen
+            if (!isReviewMode) {
+                examResults = [];
+                let correctAnswers = 0;
+                
+                questions.forEach((question, index) => {
+                    const userAnswerIndex = userAnswers[index];
+                    const isCorrect = userAnswerIndex === question.correctAnswer;
+                    
+                    if (isCorrect) correctAnswers++;
+                    
+                    examResults.push({
+                        question: question.question,
+                        userAnswer: userAnswerIndex !== null ? question.options[userAnswerIndex] : "Sin responder",
+                        correctAnswer: question.options[question.correctAnswer],
+                        isCorrect: isCorrect,
+                        explanation: question.explanation
+                    });
+                });
+                
+                // Mostrar pantalla de resultados
+                showResults(correctAnswers, questions.length);
+            } else {
+                // En modo repaso, simplemente mostrar los resultados acumulados
+                const correctAnswers = examResults.filter(result => result && result.isCorrect).length;
+                const totalAnswered = examResults.filter(result => result !== undefined).length;
+                
+                showResults(correctAnswers, totalAnswered);
+            }
+        }
+        
+        function showResults(correctCountValue, totalQuestions) {
+            // Calcular porcentaje
+            const percentage = totalQuestions > 0 ? Math.round((correctCountValue / totalQuestions) * 100) : 0;
+            
+            // Actualizar elementos de resultados
+            resultDiscipline.textContent = getDisciplineName();
+            scorePercent.textContent = `${percentage}%`;
+            correctCount.textContent = correctCountValue;
+            incorrectCount.textContent = totalQuestions - correctCountValue;
+            
+            // Mostrar revisión de preguntas
+            reviewList.innerHTML = '';
+            
+            examResults.forEach((result, index) => {
+                if (!result) return;
+                
+                const reviewItem = document.createElement('div');
+                reviewItem.classList.add('review-item');
+                reviewItem.classList.add(result.isCorrect ? 'correct' : 'incorrect');
+                
+                reviewItem.innerHTML = `
+                    <div class="review-question"><strong>Pregunta ${index + 1}:</strong> ${result.question.substring(0, 100)}...</div>
+                    <div class="review-answer"><strong>Tu respuesta:</strong> ${result.userAnswer}</div>
+                    <div class="review-answer"><strong>Respuesta correcta:</strong> ${result.correctAnswer}</div>
+                `;
+                
+                reviewList.appendChild(reviewItem);
+            });
+            
+            // Mostrar pantalla de resultados
+            examScreen.classList.remove('visible');
+            examScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+            resultScreen.classList.add('visible');
+        }
+        
+        function restartExam() {
+            startExam();
+        }
+        
+        // Inicializar aplicación
+        showMainMenu();
+    </script>
+</body>
+</html>
