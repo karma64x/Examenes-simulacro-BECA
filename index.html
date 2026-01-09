@@ -110,12 +110,28 @@
             background: linear-gradient(to right, #d35400, #ba4a00);
         }
 
-        .menu-btn.digital {
+        .menu-btn.geography {
+            background: linear-gradient(to right, #3498db, #2980b9);
+        }
+
+        .menu-btn.geography:hover {
+            background: linear-gradient(to right, #2980b9, #2573a7);
+        }
+
+        .menu-btn.internet-history {
             background: linear-gradient(to right, #9b59b6, #8e44ad);
         }
 
-        .menu-btn.digital:hover {
+        .menu-btn.internet-history:hover {
             background: linear-gradient(to right, #8e44ad, #7d3c98);
+        }
+
+        .menu-btn.digital {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+        }
+
+        .menu-btn.digital:hover {
+            background: linear-gradient(to right, #c0392b, #a93226);
         }
 
         .menu-btn.back {
@@ -468,8 +484,14 @@
                 <button class="menu-btn biology" id="biology-btn">
                     <i class="fas fa-dna"></i> Biología (20 preguntas)
                 </button>
+                <button class="menu-btn geography" id="geography-btn">
+                    <i class="fas fa-globe-americas"></i> Geografía (20 preguntas)
+                </button>
                 <button class="menu-btn history" id="history-btn">
-                    <i class="fas fa-network-wired"></i> Historia y evolución del Internet en Bolivia (30 preguntas)
+                    <i class="fas fa-landmark"></i> Historia (20 preguntas)
+                </button>
+                <button class="menu-btn internet-history" id="internet-history-btn">
+                    <i class="fas fa-network-wired"></i> Historia del Internet en Bolivia (30 preguntas)
                 </button>
                 <button class="menu-btn digital" id="digital-btn">
                     <i class="fas fa-laptop-code"></i> Impacto de la digitalización (30 preguntas)
@@ -812,8 +834,496 @@
             }
         ];
 
-        // Datos de las preguntas de Historia del Internet en Bolivia
+        // Datos de las preguntas de Geografía
+        const geographyQuestions = [
+            {
+                id: 1,
+                question: "Desde la perspectiva de la geografía regional sudamericana, la ubicación de un país influye de manera decisiva en sus características físicas, climáticas y socio-territoriales. Considerando la posición de Bolivia en el continente, ¿qué rasgo define con mayor precisión su ubicación geográfica?",
+                options: [
+                    "Se encuentra exclusivamente en la región andina de Sudamérica.",
+                    "Es un país costero con acceso directo al Océano Pacífico.",
+                    "Se localiza en la región central de América del Sur, articulando espacios geográficos de transición entre los Andes, la Amazonía y el Chaco.",
+                    "Está situado únicamente en la llanura amazónica."
+                ],
+                correctAnswer: 2,
+                explanation: "Bolivia se localiza en la región central de América del Sur, lo que le permite articular espacios geográficos de transición entre los Andes, la Amazonía y el Chaco. Esta ubicación continental explica su diversidad climática, ecológica y cultural, así como su condición de país mediterráneo con múltiples conexiones fronterizas."
+            },
+            {
+                id: 2,
+                question: "En la organización territorial de los Estados, la división político-administrativa cumple un rol fundamental para la gestión pública. Desde el enfoque geográfico, ¿cuál es su finalidad principal?",
+                options: [
+                    "Establecer límites naturales entre países vecinos.",
+                    "Organizar el territorio en unidades para facilitar la administración estatal, la planificación territorial y la provisión de servicios públicos.",
+                    "Delimitar áreas exclusivas para la explotación de recursos naturales.",
+                    "Crear barreras para controlar el movimiento de la población."
+                ],
+                correctAnswer: 1,
+                explanation: "La división político-administrativa organiza el territorio en unidades como departamentos, provincias y municipios, con el propósito de facilitar la administración estatal, la planificación territorial y la provisión de servicios públicos. Estas divisiones responden a decisiones históricas y políticas, y permiten una gestión más eficiente del espacio geográfico desde el punto de vista institucional."
+            },
+            {
+                id: 3,
+                question: "La configuración del relieve sudamericano es el resultado de procesos geológicos de larga duración. En este contexto, ¿qué proceso físico explica la formación de la Cordillera de los Andes?",
+                options: [
+                    "Erosión fluvial durante millones de años.",
+                    "Movimiento de placas tectónicas y el proceso de subducción.",
+                    "Actividad volcánica aislada sin relación con otros procesos geológicos.",
+                    "Glaciaciones que modelaron las montañas."
+                ],
+                correctAnswer: 1,
+                explanation: "La formación de la Cordillera de los Andes se explica a partir de la teoría de la tectónica de placas. En el margen occidental de América del Sur, la placa de Nazca converge y se introduce por debajo de la placa Sudamericana en un proceso denominado subducción. Esta interacción genera compresión de la corteza terrestre, provocando el plegamiento, fracturamiento y levantamiento progresivo de los materiales continentales."
+            },
+            {
+                id: 4,
+                question: "Bolivia presenta una notable diversidad climática en un territorio relativamente reducido. ¿Cuál es el factor geográfico que incide de manera más directa en esta diversidad?",
+                options: [
+                    "La proximidad al Océano Pacífico.",
+                    "La altitud y el relieve, que generan distintos pisos climáticos.",
+                    "Exclusivamente la latitud en la que se encuentra.",
+                    "La influencia de las corrientes marinas."
+                ],
+                correctAnswer: 1,
+                explanation: "La diversidad climática de Bolivia se explica fundamentalmente por la altitud y el relieve, factores geográficos que influyen de manera directa en la temperatura y en la distribución de las precipitaciones. El relieve boliviano, caracterizado por la presencia del Altiplano, los valles interandinos y las extensas llanuras orientales, da lugar a la formación de distintos pisos climáticos y ecológicos."
+            },
+            {
+                id: 5,
+                question: "Los paisajes naturales están en constante transformación debido a diversos procesos geomorfológicos. ¿Cómo se define correctamente el proceso de erosión?",
+                options: [
+                    "Proceso de acumulación de materiales en las desembocaduras de los ríos.",
+                    "Proceso mediante el cual agentes naturales como el agua, el viento y el hielo desgastan y transportan materiales de la superficie terrestre.",
+                    "Formación de nuevas rocas a partir del magma subterráneo.",
+                    "Movimiento de placas tectónicas que genera sismos."
+                ],
+                correctAnswer: 1,
+                explanation: "La erosión es un proceso geomorfológico externo mediante el cual agentes naturales como el agua, el viento, el hielo y la gravedad actúan sobre la superficie terrestre, provocando el desgaste, desprendimiento y transporte de materiales como rocas, suelos y sedimentos."
+            },
+            {
+                id: 6,
+                question: "En el estudio del espacio geográfico, los mapas cumplen una función esencial. ¿Qué tipo de mapa se utiliza principalmente para representar elementos naturales como ríos, montañas y relieves?",
+                options: [
+                    "Mapa político",
+                    "Mapa físico",
+                    "Mapa económico",
+                    "Mapa demográfico"
+                ],
+                correctAnswer: 1,
+                explanation: "El mapa físico es una representación cartográfica que muestra los principales elementos naturales del territorio, como sistemas montañosos, llanuras, mesetas, ríos, lagos y otras formas del relieve, utilizando colores, símbolos y gradaciones altitudinales convencionales."
+            },
+            {
+                id: 7,
+                question: "En la clasificación de los recursos naturales, ¿qué característica distingue a los recursos renovables?",
+                options: [
+                    "Son aquellos que existen en cantidades limitadas y no se regeneran.",
+                    "Son aquellos que poseen la capacidad de regenerarse de manera natural en períodos relativamente cortos.",
+                    "Son exclusivamente los recursos minerales y energéticos.",
+                    "Son aquellos que solo pueden utilizarse una vez."
+                ],
+                correctAnswer: 1,
+                explanation: "Los recursos naturales renovables son aquellos que poseen la capacidad de regenerarse de manera natural en períodos relativamente cortos, siempre que su aprovechamiento se realice dentro de los límites de recuperación de los ecosistemas."
+            },
+            {
+                id: 8,
+                question: "Para analizar la distribución de la población en el territorio, la geografía utiliza indicadores específicos. ¿Qué expresa la densidad poblacional?",
+                options: [
+                    "El número total de habitantes de un país.",
+                    "La relación entre el número de habitantes y la superficie territorial que ocupan.",
+                    "La tasa de crecimiento demográfico anual.",
+                    "El porcentaje de población urbana versus rural."
+                ],
+                correctAnswer: 1,
+                explanation: "La densidad poblacional es un indicador demográfico fundamental que expresa la relación entre el número de habitantes y la superficie territorial que estos ocupan, generalmente calculada en habitantes por kilómetro cuadrado."
+            },
+            {
+                id: 9,
+                question: "En el análisis de la estructura económica de una sociedad, las actividades productivas se clasifican en distintos sectores. ¿Cuál de las siguientes actividades corresponde de manera directa al sector primario?",
+                options: [
+                    "Industria manufacturera",
+                    "Comercio y servicios",
+                    "Agricultura",
+                    "Investigación científica"
+                ],
+                correctAnswer: 2,
+                explanation: "El sector primario está conformado por aquellas actividades económicas cuya función principal es la extracción, recolección o aprovechamiento directo de los recursos naturales, sin someterlos a procesos de transformación industrial complejos. La agricultura es una actividad central del sector primario."
+            },
+            {
+                id: 10,
+                question: "La deforestación es una problemática ambiental con múltiples efectos territoriales. ¿Cuál es una de sus consecuencias directas más significativas?",
+                options: [
+                    "Aumento de la fertilidad del suelo a largo plazo.",
+                    "Pérdida de biodiversidad y aumento de la erosión del suelo.",
+                    "Incremento de las reservas de agua subterránea.",
+                    "Mejora de la calidad del aire en la región."
+                ],
+                correctAnswer: 1,
+                explanation: "La deforestación provoca desequilibrios ecológicos al interrumpir los ciclos naturales del agua, del carbono y de los nutrientes, lo que se traduce en la pérdida de biodiversidad debido a la destrucción de hábitats. La ausencia de cobertura vegetal expone el suelo a la acción directa de la lluvia y el viento, favoreciendo la erosión."
+            },
+            {
+                id: 11,
+                question: "Para ubicar un punto específico en la superficie terrestre se utilizan sistemas de referencia. ¿Cuáles son las coordenadas geográficas básicas?",
+                options: [
+                    "Altitud y longitud",
+                    "Latitud y altitud",
+                    "Latitud y longitud",
+                    "Meridianos y paralelos"
+                ],
+                correctAnswer: 2,
+                explanation: "La latitud y la longitud constituyen las coordenadas geográficas fundamentales que permiten localizar con precisión cualquier punto sobre la superficie terrestre mediante un sistema de referencia universal."
+            },
+            {
+                id: 12,
+                question: "En la dinámica fluvial, ciertas formas del relieve se originan por acumulación de sedimentos. ¿Cómo se denomina la formación que se produce en la desembocadura de un río?",
+                options: [
+                    "Cañón",
+                    "Delta",
+                    "Meseta",
+                    "Valle glaciar"
+                ],
+                correctAnswer: 1,
+                explanation: "El delta es una forma de relieve fluvial que se origina cuando un río alcanza su desembocadura en un mar, lago u otro cuerpo de agua y su velocidad de corriente disminuye, provocando la deposición progresiva de sedimentos transportados a lo largo de su curso."
+            },
+            {
+                id: 13,
+                question: "Los desplazamientos poblacionales pueden clasificarse según su alcance territorial. ¿Qué se entiende por migración interna?",
+                options: [
+                    "Desplazamiento entre diferentes países.",
+                    "Desplazamiento de personas dentro de las fronteras de un mismo país.",
+                    "Movimientos estacionales de poblaciones nómadas.",
+                    "Desplazamientos forzados por conflictos armados."
+                ],
+                correctAnswer: 1,
+                explanation: "La migración interna se define como el desplazamiento de personas o grupos poblacionales dentro de las fronteras de un mismo país, generalmente desde zonas rurales hacia áreas urbanas o entre distintas regiones del territorio nacional."
+            },
+            {
+                id: 14,
+                question: "Algunos recursos naturales tienen un rol clave en la economía y el desarrollo. ¿Cuál de los siguientes es considerado un recurso energético estratégico?",
+                options: [
+                    "Agua potable",
+                    "Suelo agrícola",
+                    "Gas natural",
+                    "Madera"
+                ],
+                correctAnswer: 2,
+                explanation: "El gas natural es considerado un recurso energético estratégico debido a su papel fundamental en la generación de energía, el abastecimiento industrial y el consumo doméstico, así como por su significativo impacto económico a escala nacional y regional."
+            },
+            {
+                id: 15,
+                question: "Desde los enfoques de la geografía contemporánea, ¿cómo se define de manera más precisa el concepto de espacio geográfico?",
+                options: [
+                    "Como un soporte físico neutro donde ocurren los fenómenos humanos.",
+                    "Como una construcción social y dinámica, producto de la interacción permanente entre elementos naturales y actividades humanas.",
+                    "Exclusivamente como el territorio delimitado por fronteras políticas.",
+                    "Como el conjunto de coordenadas que definen un lugar en el mapa."
+                ],
+                correctAnswer: 1,
+                explanation: "Desde la geografía contemporánea, el espacio geográfico se concibe como una construcción social y dinámica, producto de la interacción permanente entre los elementos naturales y las actividades humanas. Esta concepción reconoce que el espacio no es estático ni neutro, sino que se transforma a lo largo del tiempo como resultado de procesos históricos, sociales y económicos."
+            },
+            {
+                id: 16,
+                question: "A lo largo de la historia, los ríos han desempeñado un papel central en la organización del territorio. ¿Cuál es una de sus principales funciones?",
+                options: [
+                    "Actuar como barreras naturales que separan culturas.",
+                    "Proporcionar agua dulce, suelos fértiles y servir como vías naturales de comunicación.",
+                    "Generar energía eléctrica de manera exclusiva.",
+                    "Crear fronteras políticas permanentes."
+                ],
+                correctAnswer: 1,
+                explanation: "Los ríos constituyen elementos fundamentales en la organización del espacio geográfico, ya que proporcionan recursos y condiciones naturales esenciales para el desarrollo de las sociedades humanas. Proporcionan agua dulce para el consumo, la agricultura y diversas actividades económicas, además de aportar suelos fértiles y funcionar como vías naturales de comunicación y transporte."
+            },
+            {
+                id: 17,
+                question: "La desertificación es un problema ambiental de alcance global. ¿En qué consiste este proceso?",
+                options: [
+                    "Expansión natural de los desiertos por cambios climáticos.",
+                    "Pérdida progresiva de la capacidad productiva del suelo en zonas áridas y semiáridas debido a factores climáticos y actividades humanas inadecuadas.",
+                    "Formación de nuevos desiertos por actividad volcánica.",
+                    "Proceso reversible de degradación leve del suelo."
+                ],
+                correctAnswer: 1,
+                explanation: "La desertificación es un proceso de degradación ambiental que se manifiesta en la pérdida progresiva de la capacidad productiva del suelo en zonas áridas y semiáridas, como consecuencia de la interacción entre factores climáticos y actividades humanas inadecuadas como la deforestación, el sobrepastoreo y el uso intensivo del suelo agrícola."
+            },
+            {
+                id: 18,
+                question: "El relieve influye de manera directa en la organización del espacio geográfico porque:",
+                options: [
+                    "Determina exclusivamente el tipo de vegetación de una región.",
+                    "Condiciona el clima, la disponibilidad de recursos naturales y las posibilidades de ocupación y uso del suelo.",
+                    "Solo afecta a las actividades agrícolas.",
+                    "Influye únicamente en la distribución de la población urbana."
+                ],
+                correctAnswer: 1,
+                explanation: "El relieve constituye un factor geográfico determinante en la organización del espacio, ya que influye de manera directa en el clima, la disponibilidad de recursos naturales y las posibilidades de ocupación y uso del suelo. Las formas del relieve condicionan la temperatura, las precipitaciones y los vientos, generando climas diferenciados que inciden en la vegetación y en los sistemas productivos."
+            },
+            {
+                id: 19,
+                question: "La distribución de los climas en la Tierra no es aleatoria, sino que responde a factores astronómicos y geográficos. ¿Cuál es el criterio principal que se utiliza para establecer las zonas climáticas de la Tierra a escala global?",
+                options: [
+                    "La altitud sobre el nivel del mar.",
+                    "La proximidad a los océanos.",
+                    "La latitud, que determina el ángulo de incidencia de los rayos solares.",
+                    "La presencia de montañas y cordilleras."
+                ],
+                correctAnswer: 2,
+                explanation: "Las zonas climáticas del planeta se establecen fundamentalmente a partir de la latitud, ya que esta determina el ángulo con el que los rayos solares inciden sobre la superficie terrestre. Debido a la forma esférica de la Tierra y a la inclinación de su eje, la radiación solar se distribuye de manera desigual, generando zonas cálidas, templadas y frías."
+            },
+            {
+                id: 20,
+                question: "El planeta Tierra realiza movimientos constantes que tienen efectos directos sobre la vida y los fenómenos geográficos. ¿Cuál de los siguientes fenómenos es resultado directo del movimiento de rotación de la Tierra?",
+                options: [
+                    "Las estaciones del año",
+                    "La alternancia del día y la noche",
+                    "Las mareas oceánicas",
+                    "Los cambios climáticos a largo plazo"
+                ],
+                correctAnswer: 1,
+                explanation: "El movimiento de rotación consiste en el giro de la Tierra sobre su propio eje, que se completa aproximadamente cada 24 horas. Este movimiento provoca la alternancia del día y la noche, ya que mientras una parte del planeta recibe la radiación solar, la otra permanece en sombra."
+            }
+        ];
+
+        // Datos de las preguntas de Historia
         const historyQuestions = [
+            {
+                id: 1,
+                question: "Durante el siglo XX, Bolivia vivió profundos cambios políticos, sociales y económicos. Uno de los procesos históricos que marcó este período fue la Revolución Nacional de 1952. ¿Cuál de las siguientes afirmaciones expresa de mejor manera uno de sus efectos estructurales en la sociedad boliviana?",
+                options: [
+                    "Consolidó el poder de la oligarquía minera y terrateniente.",
+                    "Profundizó la dependencia económica frente a potencias extranjeras.",
+                    "Implementó reformas que modificaron las relaciones de poder y ampliaron la participación de sectores históricamente excluidos.",
+                    "Mantuvo intactas las estructuras sociales del periodo colonial."
+                ],
+                correctAnswer: 2,
+                explanation: "La Revolución Nacional de 1952 constituyó un proceso de transformación estructural del Estado boliviano, caracterizado por reformas profundas que modificaron las relaciones de poder y ampliaron la participación social y política de sectores históricamente excluidos. Entre sus medidas más significativas se encuentran la nacionalización de las minas, la reforma agraria y la instauración del voto universal."
+            },
+            {
+                id: 2,
+                question: "La construcción de la ciudadanía en Bolivia ha sido un proceso histórico marcado por avances y limitaciones en el acceso efectivo a derechos y deberes. En este contexto, la ciudadanía se comprende principalmente como:",
+                options: [
+                    "Una condición jurídica otorgada automáticamente al nacer en un territorio.",
+                    "El ejercicio activo y consciente de derechos y deberes en la vida pública, que implica participación en procesos democráticos.",
+                    "Un privilegio reservado para ciertos grupos sociales con mayor poder económico.",
+                    "Un concepto teórico sin aplicación práctica en la vida cotidiana."
+                ],
+                correctAnswer: 1,
+                explanation: "La ciudadanía no se reduce a la pertenencia legal a un Estado, sino que implica el ejercicio activo y consciente de derechos y deberes en la vida pública. En el contexto boliviano, la construcción de la ciudadanía ha estado marcada por luchas históricas orientadas a ampliar la participación política de sectores anteriormente excluidos."
+            },
+            {
+                id: 3,
+                question: "Las sociedades prehispánicas que se desarrollaron en el altiplano andino alcanzaron niveles complejos de organización política, económica y simbólica. En este contexto, la civilización de Tiwanaku se distinguió por un modelo de organización que permitió su expansión e influencia regional durante varios siglos. ¿Cuál de las siguientes características explica mejor ese tipo de organización?",
+                options: [
+                    "Una organización tribal descentralizada sin autoridad central.",
+                    "Un sistema basado exclusivamente en el comercio a larga distancia.",
+                    "Una estructura que articulaba autoridad política, control territorial y prácticas religiosas en un sistema integrado.",
+                    "Una sociedad guerrera sin desarrollo cultural significativo."
+                ],
+                correctAnswer: 2,
+                explanation: "La evidencia arqueológica y arquitectónica muestra que Tiwanaku articuló autoridad política, control territorial y prácticas religiosas en un sistema integrado, lo que favoreció la cohesión social, la redistribución de recursos y la expansión de su influencia más allá de su núcleo original."
+            },
+            {
+                id: 4,
+                question: "Durante el periodo colonial, ciertas ciudades adquirieron una importancia económica y política excepcional dentro del Imperio español. La fundación de Potosí transformó profundamente la dinámica del Alto Perú. ¿Qué factor explica principalmente el rápido crecimiento y relevancia de esta ciudad?",
+                options: [
+                    "Su ubicación estratégica como centro de intercambio cultural.",
+                    "El descubrimiento de grandes yacimientos de plata en el Cerro Rico.",
+                    "Su función como capital administrativa del virreinato.",
+                    "Su importancia como centro religioso y de peregrinación."
+                ],
+                correctAnswer: 1,
+                explanation: "El descubrimiento de los grandes yacimientos de plata en Potosí, a mediados del siglo XVI, transformó de manera decisiva la economía del mundo colonial y el papel del Alto Perú dentro del Imperio español. La explotación del Cerro Rico convirtió a la ciudad en uno de los principales centros productores de plata a escala global."
+            },
+            {
+                id: 5,
+                question: "A lo largo de la historia boliviana, el reconocimiento de los derechos sociales ha estado vinculado a procesos de cambio político y demandas colectivas. Desde esta perspectiva, los derechos sociales se orientan principalmente a:",
+                options: [
+                    "Garantizar privilegios exclusivos para las élites económicas.",
+                    "Reducir desigualdades estructurales y asegurar condiciones básicas de vida digna para la población.",
+                    "Limitar la participación política de los sectores populares.",
+                    "Fortalecer el control estatal sobre la vida privada de los ciudadanos."
+                ],
+                correctAnswer: 1,
+                explanation: "Los derechos sociales están orientados a reducir desigualdades estructurales y asegurar condiciones básicas de vida digna, como educación, salud y trabajo. Su finalidad es promover igualdad de oportunidades y justicia social, especialmente para sectores históricamente excluidos."
+            },
+            {
+                id: 6,
+                question: "Los acontecimientos ocurridos en 1809 en la ciudad de Chuquisaca son considerados hitos tempranos del proceso emancipador sudamericano. ¿Por qué estos hechos son valorados como antecedentes de la independencia?",
+                options: [
+                    "Porque lograron la independencia definitiva del Alto Perú.",
+                    "Porque cuestionaron la legitimidad del poder colonial y promovieron ideas de autogobierno.",
+                    "Porque fueron impulsados exclusivamente por la corona española.",
+                    "Porque establecieron una monarquía independiente en la región."
+                ],
+                correctAnswer: 1,
+                explanation: "Estos movimientos incorporaron de manera progresiva la noción de autogobierno como alternativa al orden impuesto por la metrópoli, cuestionando la legitimidad del poder colonial y sus mecanismos de dominación política, económica y social. Configuraron un precedente político e ideológico de largo alcance."
+            },
+            {
+                id: 7,
+                question: "La relación entre Estado y sociedad ha variado a lo largo del tiempo, dependiendo de los modelos políticos y económicos predominantes. En determinados momentos históricos, el Estado asumió un rol más activo frente a las demandas sociales. Este rol activo del Estado se caracteriza principalmente por:",
+                options: [
+                    "Intervenir para regular la economía y atender demandas sociales, especialmente en contextos de desigualdad.",
+                    "Mantenerse al margen de los asuntos económicos y sociales.",
+                    "Privatizar todos los servicios públicos y recursos naturales.",
+                    "Eliminar cualquier forma de organización social independiente."
+                ],
+                correctAnswer: 0,
+                explanation: "Un Estado activo interviene para regular la economía y atender demandas sociales, especialmente en contextos de desigualdad. Esta intervención busca garantizar derechos, promover el bienestar colectivo y corregir desequilibrios estructurales."
+            },
+            {
+                id: 8,
+                question: "Tras el proceso independentista, la creación de la República implicó no solo la ruptura con el dominio colonial, sino también la construcción de un nuevo orden político y jurídico. Desde una perspectiva histórica, la fundación de la República se caracterizó principalmente por:",
+                options: [
+                    "La inclusión plena de todos los grupos sociales en el nuevo Estado.",
+                    "El liderazgo de élites criollas que mantuvieron estructuras sociales excluyentes heredadas de la colonia.",
+                    "La inmediata distribución equitativa de la tierra y la riqueza.",
+                    "La desaparición completa de las diferencias étnicas y culturales."
+                ],
+                correctAnswer: 1,
+                explanation: "La fundación de la República estuvo liderada por élites criollas que asumieron el control del nuevo Estado. Aunque se proclamó la igualdad jurídica, en la práctica se mantuvieron estructuras sociales excluyentes heredadas de la colonia. Los pueblos indígenas quedaron marginados de la participación política y del acceso al poder."
+            },
+            {
+                id: 9,
+                question: "La independencia de Bolivia fue el resultado de un proceso político y militar complejo, influido por líderes regionales y continentales. En este contexto, la proclamación de 1825 estuvo directamente vinculada a la acción de:",
+                options: [
+                    "Líderes locales sin conexión con movimientos independentistas más amplios.",
+                    "Una conducción militar y política capaz de articular ideales independentistas con estrategia militar eficaz y visión política.",
+                    "Intervención directa de potencias europeas no españolas.",
+                    "Movimientos espontáneos y desorganizados de la población."
+                ],
+                correctAnswer: 1,
+                explanation: "La conducción militar y política que permitió la derrota definitiva del poder español en el Alto Perú se sustentó en un liderazgo capaz de articular, de manera coherente, los ideales independentistas con una estrategia militar eficaz y una visión política orientada a la construcción de un nuevo orden estatal."
+            },
+            {
+                id: 10,
+                question: "Durante el período republicano, la economía nacional estuvo fuertemente influida por la explotación de recursos naturales y su vinculación con el mercado internacional. Desde esta perspectiva, una característica central de la economía republicana fue:",
+                options: [
+                    "La diversificación productiva y el desarrollo industrial autónomo.",
+                    "La exportación de materias primas, generando dependencia económica y vulnerabilidad frente a fluctuaciones externas.",
+                    "La autosuficiencia económica y el aislamiento comercial.",
+                    "La distribución equitativa de la riqueza generada por la explotación de recursos."
+                ],
+                correctAnswer: 1,
+                explanation: "La economía republicana se basó principalmente en la exportación de materias primas, como minerales, hacia el mercado internacional. Este modelo generó dependencia económica y vulnerabilidad frente a las fluctuaciones externas. La riqueza producida se concentró en pocos sectores, profundizando desigualdades sociales."
+            },
+            {
+                id: 11,
+                question: "La Guerra del Pacífico marcó un punto de inflexión en la historia boliviana, con consecuencias que perduran hasta la actualidad. ¿Cuál fue su impacto estructural más significativo?",
+                options: [
+                    "Fortalecimiento de la integración regional andina.",
+                    "Transformaciones profundas y duraderas en la configuración territorial del país.",
+                    "Modernización acelerada de las fuerzas armadas bolivianas.",
+                    "Surgimiento de un movimiento pacifista a nivel nacional."
+                ],
+                correctAnswer: 1,
+                explanation: "El conflicto generó transformaciones profundas y duraderas en la configuración territorial del país, al modificar fronteras, redefinir espacios estratégicos y consolidar pérdidas geopolíticas que trascendieron el momento bélico. Estas alteraciones territoriales afectaron la integridad del Estado e incidieron directamente en su acceso a recursos naturales y vías de comunicación."
+            },
+            {
+                id: 12,
+                question: "La etapa republicana estuvo marcada por conflictos internos, guerras civiles y disputas regionales. Estos conflictos influyeron en la configuración del Estado nacional. Desde una perspectiva histórica, estos conflictos reflejan principalmente:",
+                options: [
+                    "La fortaleza y consolidación temprana de las instituciones democráticas.",
+                    "La dificultad para construir un proyecto nacional integrador y la fragmentación del poder estatal.",
+                    "La ausencia total de tensiones sociales en el periodo.",
+                    "La homogeneidad cultural y política de la población."
+                ],
+                correctAnswer: 1,
+                explanation: "Los conflictos internos de la etapa republicana evidencian la dificultad para construir un proyecto nacional integrador. Las disputas regionales, políticas y económicas fragmentaron el poder estatal. La falta de consenso sobre el modelo de Estado generó inestabilidad permanente."
+            },
+            {
+                id: 13,
+                question: "Durante la época moderna, Europa inició un proceso de expansión hacia otros continentes que transformó profundamente las relaciones entre pueblos y regiones del mundo. Este proceso tuvo impactos duraderos en la historia global. Desde una mirada general, la expansión europea se explica principalmente por:",
+                options: [
+                    "Motivaciones exclusivamente religiosas de evangelización.",
+                    "Intereses económicos y políticos, como el control de rutas comerciales y el acceso a recursos estratégicos.",
+                    "La búsqueda científica de nuevos conocimientos geográficos.",
+                    "La sobrepoblación europea que requería nuevos territorios."
+                ],
+                correctAnswer: 1,
+                explanation: "La expansión europea estuvo motivada por intereses económicos y políticos, como el control de rutas comerciales y el acceso a recursos estratégicos. Las monarquías buscaban aumentar su poder y riqueza en un contexto de competencia internacional. Este proceso dio lugar a la colonización y a profundas desigualdades entre regiones."
+            },
+            {
+                id: 14,
+                question: "Durante la época moderna se consolidaron nuevas prácticas económicas que transformaron las relaciones de producción y comercio. Estas prácticas sentaron las bases del sistema económico capitalista. Desde una perspectiva histórica, una característica clave de la economía moderna temprana fue:",
+                options: [
+                    "La autarquía económica y la producción exclusivamente para el consumo local.",
+                    "El crecimiento del comercio internacional y la acumulación de capital.",
+                    "La ausencia de instituciones financieras y bancarias.",
+                    "La distribución equitativa de la riqueza generada por el comercio."
+                ],
+                correctAnswer: 1,
+                explanation: "La economía de la época moderna se caracterizó por el crecimiento del comercio internacional y la acumulación de capital. El desarrollo de mercados, bancos y sistemas financieros impulsó nuevas dinámicas económicas. Estas transformaciones favorecieron a ciertos grupos sociales y regiones, profundizando desigualdades."
+            },
+            {
+                id: 15,
+                question: "El surgimiento del Estado moderno implicó una nueva forma de ejercer el poder político y organizar la sociedad. Este proceso transformó la relación entre gobernantes y gobernados. Desde una perspectiva histórica, el Estado moderno se caracterizó principalmente por:",
+                options: [
+                    "La descentralización del poder en múltiples señores feudales.",
+                    "La centralización del poder en manos del monarca o del gobierno central, con burocracias y ejércitos permanentes.",
+                    "La ausencia de instituciones estatales estables.",
+                    "La participación directa de todos los ciudadanos en las decisiones de gobierno."
+                ],
+                correctAnswer: 1,
+                explanation: "El Estado moderno se consolidó mediante la centralización del poder en manos del monarca o del gobierno central. Se desarrollaron burocracias, sistemas fiscales y ejércitos permanentes. Estas estructuras permitieron mayor control territorial y político. A diferencia del feudalismo, el poder dejó de estar fragmentado."
+            },
+            {
+                id: 16,
+                question: "La Edad Contemporánea se inicia con transformaciones profundas que modificaron las estructuras políticas, sociales y económicas heredadas de la época moderna. Desde una perspectiva histórica, un hecho que simboliza el inicio de la Edad Contemporánea es:",
+                options: [
+                    "El descubrimiento de América en 1492.",
+                    "La Revolución Francesa de 1789.",
+                    "La caída del Imperio Romano.",
+                    "La Revolución Industrial en Inglaterra."
+                ],
+                correctAnswer: 1,
+                explanation: "La Revolución Francesa simboliza el inicio de la Edad Contemporánea porque cuestionó el orden político tradicional basado en privilegios. Introdujo principios como igualdad jurídica, soberanía popular y derechos ciudadanos. Estos ideales transformaron la concepción del Estado y la relación entre gobernantes y gobernados."
+            },
+            {
+                id: 17,
+                question: "La Revolución Industrial transformó profundamente las formas de producción y las relaciones sociales, generando cambios duraderos en la economía y en la vida cotidiana. Desde una perspectiva histórica, una consecuencia social central de la Revolución Industrial fue:",
+                options: [
+                    "La desaparición de las diferencias de clase social.",
+                    "El origen de una nueva clase social: la clase obrera industrial.",
+                    "La reducción de la población urbana a favor del campo.",
+                    "La eliminación del trabajo infantil y femenino."
+                ],
+                correctAnswer: 1,
+                explanation: "La Revolución Industrial dio origen a una nueva clase social: la clase obrera industrial. La concentración de trabajadores en fábricas modificó las relaciones laborales y las condiciones de vida. Este proceso generó conflictos sociales y demandas por derechos laborales. A partir de ello surgieron movimientos obreros y sindicatos."
+            },
+            {
+                id: 18,
+                question: "Durante el proceso independentista en el territorio del Alto Perú, las batallas no constituyeron hechos aislados, sino momentos clave dentro de una lucha prolongada contra el dominio colonial. Desde esta perspectiva, las batallas independentistas en Bolivia fueron importantes porque:",
+                options: [
+                    "Representaron la expresión armada de un proyecto político que buscaba romper el dominio colonial español.",
+                    "Fueron acciones militares sin conexión con proyectos políticos emancipadores.",
+                    "Consolidaron inmediatamente un Estado fuerte y unificado.",
+                    "Contaron con el apoyo unánime de toda la población."
+                ],
+                correctAnswer: 0,
+                explanation: "Las batallas independentistas representaron la expresión armada de un proyecto político que buscaba romper el dominio colonial español. No fueron solo enfrentamientos militares, sino acciones vinculadas a ideas de libertad, soberanía y autogobierno. Estas acciones se articularon con procesos políticos y sociales más amplios."
+            },
+            {
+                id: 19,
+                question: "Tras un prolongado periodo de gobiernos militares y de facto, Bolivia inició en 1982 un proceso de transición política que marcó un hito en su historia contemporánea. ¿Cuál fue el significado principal del retorno a la democracia en ese contexto?",
+                options: [
+                    "La eliminación inmediata de todos los problemas económicos del país.",
+                    "La recuperación del orden constitucional y la restitución de la institucionalidad democrática tras décadas de interrupciones autoritarias.",
+                    "La instauración de un sistema económico socialista.",
+                    "La desaparición completa de los conflictos sociales."
+                ],
+                correctAnswer: 1,
+                explanation: "El retorno a la democracia en 1982 representó, fundamentalmente, la recuperación del orden constitucional y la restitución de la institucionalidad democrática tras casi dos décadas de interrupciones autoritarias. Este proceso permitió restablecer el funcionamiento regular de los órganos del Estado, la vigencia de la Constitución y el respeto a los derechos y libertades fundamentales."
+            },
+            {
+                id: 20,
+                question: "En el marco de las transformaciones educativas impulsadas durante la década de 1990, el Estado boliviano implementó en 1994 una reforma orientada a responder a las características sociales, culturales y lingüísticas del país. ¿Cuál fue el eje central que estructuró esta reforma?",
+                options: [
+                    "La homogenización cultural y lingüística de toda la población.",
+                    "El reconocimiento de la diversidad cultural y lingüística del país, estableciendo la educación intracultural, intercultural y bilingüe.",
+                    "La exclusiva enseñanza en español para todos los estudiantes.",
+                    "La eliminación de la educación pública en favor de la privada."
+                ],
+                correctAnswer: 1,
+                explanation: "La reforma educativa de 1994 incorporó como eje central el reconocimiento de la diversidad cultural y lingüística del país, estableciendo la educación intracultural, intercultural y bilingüe como fundamento del sistema educativo. Este enfoque buscó superar modelos homogenizantes que habían invisibilizado a las naciones y pueblos indígena originarios."
+            }
+        ];
+
+        // Datos de las preguntas de Historia del Internet en Bolivia (manteniendo las 30 preguntas originales)
+        const internetHistoryQuestions = [
             {
                 id: 1,
                 question: "A partir de lo expuesto en el artículo, ¿cómo define el concepto de acceso dial up?",
@@ -824,7 +1334,7 @@
                     "Un acceso a Internet mediante cable coaxial."
                 ],
                 correctAnswer: 1,
-                explanation: "El artículo describe el acceso dial up a la forma cómo 'utilizaban la línea telefónica convencional para conectar a Internet a velocidades de 56 kbps'."
+                explanation: "El acceso dial up utilizaba la línea telefónica convencional para conectar a Internet a velocidades de 56 kbps."
             },
             {
                 id: 2,
@@ -836,7 +1346,7 @@
                     "Comercio electrónico y turismo."
                 ],
                 correctAnswer: 1,
-                explanation: "El artículo señala explícitamente que el acceso generalizado a Internet ha transformado la educación (plataformas de aprendizaje virtual, clases a distancia), ha impulsado el comercio electrónico (tiendas virtuales como 'Tiendas del Valle' y Billetera Móvil) y ha mejorado la salud mediante la telemedicina y futuros servicios 5G."
+                explanation: "El acceso generalizado a Internet ha transformado la educación (plataformas de aprendizaje virtual), ha impulsado el comercio electrónico y ha mejorado la salud mediante la telemedicina y futuros servicios 5G."
             },
             {
                 id: 3,
@@ -848,7 +1358,7 @@
                     "Aumento de la brecha digital entre zonas urbanas y rurales."
                 ],
                 correctAnswer: 1,
-                explanation: "En la sección 'Expansión de la banda ancha y fibra óptica (2006-2015)' se indica que el proyecto 'Red de Información Boliviana' contó con una inversión estimada de 350 millones de dólares, que los precios de los planes de 10 Mbps se redujeron a aproximadamente 15 dólares mensuales y que la banda ancha favoreció el auge del comercio electrónico."
+                explanation: "En la expansión de banda ancha y fibra óptica se indica que los precios de los planes de 10 Mbps se redujeron y que la banda ancha favoreció el auge del comercio electrónico."
             },
             {
                 id: 4,
@@ -860,7 +1370,7 @@
                     "Primera conexión satelital (1995)"
                 ],
                 correctAnswer: 2,
-                explanation: "El artículo enumera tres subetapas cronológicas: 2.1 era dial up (1995-2005), 2.2 expansión de banda ancha y fibra óptica (2006-2015) y 2.3 convergencia móvil, 4G y la llegada de 5G."
+                explanation: "Las etapas son: era dial up (1995-2005), expansión de banda ancha y fibra óptica (2006-2015) y convergencia móvil, 4G y la llegada de 5G (2016-presente)."
             },
             {
                 id: 5,
@@ -872,7 +1382,7 @@
                     "Entel, Viva Bolivia, UMSA, Gobierno boliviano"
                 ],
                 correctAnswer: 1,
-                explanation: "El artículo indica que primero, en 1995, la Universidad Mayor de San Andrés (UMSA) estableció la primera conexión satelital permanente. Luego, a partir de 2006, el gobierno boliviano lanzó el proyecto 'Red de Información Boliviana' (RIB) para instalar fibra óptica. En 2016, la empresa estatal Entel introdujo la red 4G LTE. Finalmente, en 2022, la empresa Viva Bolivia anunció la prueba piloto de 5G."
+                explanation: "Primero la UMSA (1995), luego el gobierno boliviano (2006), después Entel (2016) y finalmente Viva Bolivia (2022)."
             },
             {
                 id: 6,
@@ -884,7 +1394,7 @@
                     "30%"
                 ],
                 correctAnswer: 1,
-                explanation: "Para finales de 2024, según el artículo, se espera que el 20% de la población tenga acceso a 5G."
+                explanation: "Para finales de 2024 se espera que el 20% de la población tenga acceso a 5G."
             },
             {
                 id: 7,
@@ -896,7 +1406,7 @@
                     "La brecha digital se elimina automáticamente con la implementación de nueva tecnología."
                 ],
                 correctAnswer: 1,
-                explanation: "El texto indica que la instalación de fibra óptica (2006‑2015) aumentó la cobertura urbana al 60% y redujo precios, y que la implementación de 5G está prevista para zonas estratégicas, pero aun así el artículo señala que en 2023 el 68% de los hogares rurales carecen de acceso fijo. Además, en la sección de desafíos se propone incentivar inversión privada y subsidios como políticas de apoyo para cerrar la brecha."
+                explanation: "La infraestructura es necesaria pero insuficiente si no se complementa con políticas que reduzcan desigualdades, como se evidencia en la persistente brecha digital entre zonas urbanas y rurales."
             },
             {
                 id: 8,
@@ -908,7 +1418,7 @@
                     "La brecha desapareció completamente."
                 ],
                 correctAnswer: 1,
-                explanation: "En 2003, según el texto, el 5% de los hogares urbanos tenía acceso y menos del 1% de los rurales (aprox. 0,8%), lo que implica una diferencia de unos 4 puntos porcentuales. En 2015, la penetración era del 38% en zonas urbanas y del 12% en rurales, lo que genera una diferencia de 26 puntos. La variación entre ambas fechas es de aproximadamente 22 puntos porcentuales, mostrando un aumento de la brecha."
+                explanation: "En 2003 la diferencia era de unos 4 puntos porcentuales (5% urbano vs 0.8% rural). En 2015 era de 26 puntos (38% urbano vs 12% rural)."
             },
             {
                 id: 9,
@@ -920,7 +1430,7 @@
                     "Reducción del 38% al 12%"
                 ],
                 correctAnswer: 1,
-                explanation: "Antes de la fase de expansión de banda ancha, en 2003 solo el 5% de los hogares urbanos tenían acceso a Internet. Tras el lanzamiento del proyecto 'Red de Información Boliviana' en 2006, que instaló fibra óptica en los corredores urbanos, la penetración aumentó hasta el 38% en 2015."
+                explanation: "Antes del proyecto (2003) solo el 5% de hogares urbanos tenía acceso. Tras el proyecto (2015) la penetración aumentó al 38%."
             },
             {
                 id: 10,
@@ -932,7 +1442,7 @@
                     "La solución es únicamente responsabilidad del gobierno."
                 ],
                 correctAnswer: 0,
-                explanation: "La sección de 'Desafíos futuros' y en la propuesta de cierre de la brecha digital, el autor señala explícitamente la necesidad de (i) incentivar la inversión privada mediante subsidios, (ii) promover la capacitación digital en escuelas y comunidades, y (iii) crear un fondo nacional para la expansión de la conectividad en zonas rurales, todo ello bajo una cooperación multisectorial entre gobierno, academia y sector privado."
+                explanation: "El autor señala la necesidad de una combinación de políticas: incentivar inversión privada mediante subsidios, promover capacitación digital y crear un fondo nacional, con cooperación multisectorial."
             },
             {
                 id: 11,
@@ -944,7 +1454,7 @@
                     "La solución es únicamente tecnológica."
                 ],
                 correctAnswer: 0,
-                explanation: "El artículo, en la sección de propuestas, sugiere combinar subsidios, incentivar la inversión privada y crear un fondo nacional, todo ello dentro de una estrategia de colaboración entre gobierno, academia y sector privado para expandir la conectividad en zonas rurales."
+                explanation: "El artículo sugiere combinar subsidios, incentivar inversión privada y crear un fondo nacional, todo dentro de una estrategia de colaboración entre gobierno, academia y sector privado."
             },
             {
                 id: 12,
@@ -956,7 +1466,7 @@
                     "El desarrollo de Internet en Bolivia ha sido lento y sin avances significativos."
                 ],
                 correctAnswer: 0,
-                explanation: "Aunque se ha pasado de un enlace satelital de 64 kbps en 1995 a pruebas piloto de 5G en 2022, la brecha digital sigue siendo marcada: el INE reporta que en 2023 el 68% de los hogares rurales carecen de acceso fijo y la penetración rural de Internet es mucho menor que la urbana. Además, en la sección de desafíos futuros se propone una combinación de subsidios, capacitación y fondos nacionales para cerrar esa brecha."
+                explanation: "Aunque se ha pasado de 64 kbps en 1995 a pruebas de 5G en 2022, la brecha digital sigue siendo marcada y se requieren políticas integradas para cerrarla."
             },
             {
                 id: 13,
@@ -968,7 +1478,7 @@
                     "Limitar el acceso a Internet en zonas urbanas para equilibrar la brecha."
                 ],
                 correctAnswer: 0,
-                explanation: "'Para cerrar la brecha' el autor propone específicamente una combinación de políticas: subsidios a la inversión privada, capacitación digital y un fondo nacional dirigido a zonas rurales."
+                explanation: "El autor propone específicamente una combinación de políticas: subsidios a la inversión privada, capacitación digital y un fondo nacional dirigido a zonas rurales."
             },
             {
                 id: 14,
@@ -980,7 +1490,7 @@
                     "Las áreas rurales quedarán completamente desconectadas."
                 ],
                 correctAnswer: 0,
-                explanation: "El artículo indica que, al cierre de 2024, se espera que el 20% de la población nacional tenga acceso a 5G, prioritariamente en zonas estratégicas de desarrollo económico, y que en 2023 el 68% de los hogares rurales carecían de acceso fijo a Internet. Además, se proponen políticas de subsidios e inversión en fibra óptica para reducir la brecha digital."
+                explanation: "Se espera que el 20% de la población tenga acceso a 5G para 2024, pero con políticas adecuadas la cobertura rural podría mejorar gradualmente."
             },
             {
                 id: 15,
@@ -992,7 +1502,7 @@
                     "Reducción de la inversión en infraestructura tecnológica."
                 ],
                 correctAnswer: 0,
-                explanation: "El texto indica que, antes de la expansión de la fibra, en 2003 solo el 5% de los hogares urbanos tenía acceso a Internet (fase dial up). Con el proyecto 'Red de Información Boliviana' iniciado en 2006, para 2012 la cobertura de fibra óptica alcanzó el 60% de la población urbana y los precios de los planes de 10 Mbps se redujeron a aproximadamente 15 dólares mensuales. Como consecuencia directa de esta mejora de infraestructura y costo, la penetración en hogares urbanos subió al 38% en 2015."
+                explanation: "Con el proyecto 'Red de Información Boliviana', la penetración en hogares urbanos subió del 5% (2003) al 38% (2015)."
             },
             {
                 id: 16,
@@ -1004,7 +1514,7 @@
                     "Solo benefició a áreas rurales."
                 ],
                 correctAnswer: 0,
-                explanation: "Entel lanzó la red 4G LTE en 2016, proporcionando velocidades comparables a la banda ancha fija y mejorando la infraestructura móvil en áreas urbanas. Más adelante, menciona que en 2022 Bolivia licitó el espectro 3.5 GHz y que Viva Bolivia anunció una prueba piloto de 5G en Puerto Suárez, aprovechando la infraestructura móvil existente."
+                explanation: "Entel lanzó la red 4G LTE en 2016, mejorando la infraestructura móvil y sentando bases para la futura implementación de 5G."
             },
             {
                 id: 17,
@@ -1016,7 +1526,7 @@
                     "Los avances tecnológicos han beneficiado por igual a todas las regiones."
                 ],
                 correctAnswer: 0,
-                explanation: "Pese a avances como la instalación de fibra óptica (cobertura del 60% urbano en 2012) y la prueba piloto de 5G en Puerto Suárez, aún persisten desigualdades: el INE reporta que en 2023 el 68% de los hogares rurales carecen de acceso fijo a Internet y la penetración rural es mucho menor que la urbana."
+                explanation: "Pese a avances como fibra óptica y pruebas de 5G, persisten desigualdades que requieren políticas específicas para la inclusión universal."
             },
             {
                 id: 18,
@@ -1028,7 +1538,7 @@
                     "La fibra óptica no tuvo impacto en la conectividad."
                 ],
                 correctAnswer: 0,
-                explanation: "Tras la expansión de la fibra óptica (cobertura del 60% en áreas urbanas para 2012) y la llegada del 4G en 2016, la penetración urbana llegó al 38% en 2015, mientras que en zonas rurales solo alcanzó el 12%. Además, en 2023 el 68% de los hogares rurales carecían de acceso fijo a Internet. Estas cifras muestran que, pese a los avances tecnológicos, la brecha digital persiste."
+                explanation: "Tras la expansión de infraestructura, la brecha digital entre áreas urbanas y rurales persiste, como muestran las estadísticas."
             },
             {
                 id: 19,
@@ -1040,7 +1550,7 @@
                     "Bolivia está rezagada tecnológicamente respecto al resto del mundo."
                 ],
                 correctAnswer: 0,
-                explanation: "El artículo describe avances tecnológicos (4G, fibra óptica, pruebas de 5G) y sus efectos positivos en educación y salud, pero también señala cifras que revelan una brecha digital persistente (por ejemplo, 68% de hogares rurales sin acceso fijo en 2023) y concluye con propuestas de políticas públicas, subsidios y colaboración entre sector público, privado y académico para cerrar esa brecha."
+                explanation: "Hay avances tecnológicos significativos pero también brechas persistentes que requieren políticas públicas integrales para ser abordadas."
             },
             {
                 id: 20,
@@ -1052,7 +1562,7 @@
                     "Solo beneficiará a empresas privadas."
                 ],
                 correctAnswer: 0,
-                explanation: "El artículo indica que la prueba piloto de 5G en Puerto Suárez conecta hospitales y universidades y menciona que la implementación de 5G 'abrirá la puerta a la cirugía a distancia y al uso de dispositivos de monitoreo en tiempo real'. De ahí se deduce que la expansión de 5G favorecerá la adopción de servicios de telemedicina avanzados en zonas que antes estaban aisladas."
+                explanation: "La prueba piloto de 5G en Puerto Suárez conecta hospitales y universidades, favoreciendo servicios de telemedicina avanzados."
             },
             {
                 id: 21,
@@ -1064,11 +1574,11 @@
                     "Las instituciones académicas no han tenido ningún papel."
                 ],
                 correctAnswer: 0,
-                explanation: "La primera conexión en 1995 fue gestionada por la Universidad Mayor de San Andrés con apoyo de la OEA; el proyecto RIB (2006‑2015) fue impulsado por el gobierno con financiamiento del BID; la red 4G fue lanzada por la empresa estatal Entel; la prueba piloto de 5G fue anunciada por Viva Bolivia; y en la sección de conclusiones se enfatiza la necesidad de cooperación entre instituciones académicas, gobierno y sector privado para cerrar la brecha digital."
+                explanation: "Diferentes actores (UMSA, gobierno, Entel, Viva Bolivia) han contribuido en distintas etapas, mostrando la importancia de la cooperación multisectorial."
             },
             {
                 id: 22,
-                question: "Según el artículo, la estimación de que el 20% de la población boliviana tendrá acceso a 5G para finales de 2024 debe evaluarse críticamente frente a la tendencia global de buscar una cobertura mayor del 50% en el mismo período; ¿cuál de las siguientes afirmaciones representa la valoración más adecuada de esta meta dentro del contexto boliviano?",
+                question: "Según el artículo, la estimación de que el 20% de la población boliviana tendrá acceso a 5G para finales de 2024 debe evaluarse críticamente frente a la tendencia global; ¿cuál de las siguientes afirmaciones representa la valoración más adecuada de esta meta?",
                 options: [
                     "Es un paso progresivo realista, considerando la brecha digital existente y la concentración inicial en zonas estratégicas.",
                     "Es una meta ambiciosa e irrealizable.",
@@ -1076,11 +1586,11 @@
                     "La meta debería ser del 100% para igualar a los países desarrollados."
                 ],
                 correctAnswer: 0,
-                explanation: "Para finales de 2024, se espera que el 20% de la población tenga acceso a 5G, concentrándose inicialmente en zonas estratégicas como Puerto Suárez donde se realizó la prueba piloto. Además, el texto menciona que la expansión de fibra óptica ya cubre gran parte de las áreas urbanas, lo que permite un despliegue complementario. Sin embargo, también se señala que en 2023 el 68% de los hogares rurales carecen de acceso fijo a Internet, evidenciando una brecha digital que sigue siendo un desafío; por ello la meta del 20% es un paso progresivo, no una cobertura total."
+                explanation: "El 20% es un paso progresivo realista, considerando la brecha digital y la concentración inicial en zonas estratégicas."
             },
             {
                 id: 23,
-                question: "El artículo señala que, según el INE, en 2023 el 68% de los hogares rurales carecen de acceso fijo a Internet. ¿Cuál de los siguientes posibles sesgos podría afectar la interpretación de este dato en el análisis del autor?",
+                question: "El artículo señala que, según el INE, en 2023 el 68% de los hogares rurales carecen de acceso fijo a Internet. ¿Cuál de los siguientes posibles sesgos podría afectar la interpretación de este dato?",
                 options: [
                     "Equiparar la ausencia de acceso fijo con la ausencia total de conectividad, ignorando que muchos hogares podrían usar conexiones móviles.",
                     "Sobrestimar la conectividad rural.",
@@ -1088,19 +1598,19 @@
                     "Considerar que el acceso fijo es irrelevante para la conectividad."
                 ],
                 correctAnswer: 0,
-                explanation: "El artículo menciona el porcentaje del 68% de hogares rurales sin acceso fijo a Internet, pero no discute que muchos de esos hogares podrían estar usando Internet a través de conexiones móviles (3G/4G) que no requieren infraestructura fija. Esta ausencia constituye un sesgo de interpretación: equiparar la ausencia de acceso fijo con la ausencia total de conectividad."
+                explanation: "El dato del 68% sin acceso fijo no considera que muchos hogares rurales podrían estar usando Internet a través de conexiones móviles (3G/4G)."
             },
             {
                 id: 24,
-                question: "El artículo señala que la prueba piloto de 5G en Puerto Suárez conectó hospitales y universidades con aplicaciones de telemedicina y realidad aumentada. ¿Por qué es relevante esta información para la planificación de políticas públicas orientadas a reducir la brecha digital en zonas rurales?",
+                question: "El artículo señala que la prueba piloto de 5G en Puerto Suárez conectó hospitales y universidades con aplicaciones de telemedicina. ¿Por qué es relevante esta información para la planificación de políticas públicas?",
                 options: [
-                    "Evidencia que el 5G puede ofrecer servicios críticos (salud, educación) en zonas de difícil acceso, justificando su expansión como herramienta clave para reducir la brecha digital.",
+                    "Evidencia que el 5G puede ofrecer servicios críticos en zonas de difícil acceso, justificando su expansión como herramienta para reducir la brecha digital.",
                     "Muestra que el 5G solo es útil en zonas urbanas.",
                     "Indica que la telemedicina no es importante para zonas rurales.",
                     "Demuestra que el 5G no tiene aplicaciones prácticas en salud y educación."
                 ],
                 correctAnswer: 0,
-                explanation: "El texto describe la prueba piloto de 5G en Puerto Suárez que conectó hospitales y universidades con aplicaciones de telemedicina y realidad aumentada, y en la sección de desafíos se menciona la persistente brecha digital entre zonas urbanas y rurales. Evidenciar que 5G puede ofrecer servicios críticos (salud, educación) en zonas de difícil acceso justifica que las políticas públicas consideren la expansión de esta tecnología como una herramienta clave para reducir esa brecha."
+                explanation: "Mostrar que 5G puede ofrecer servicios críticos en zonas de difícil acceso justifica políticas públicas que consideren su expansión para reducir brechas digitales."
             },
             {
                 id: 25,
@@ -1112,7 +1622,7 @@
                     "Falso, porque el 5G no tiene ninguna ventaja sobre tecnologías anteriores."
                 ],
                 correctAnswer: 0,
-                explanation: "El texto señala que se espera que sólo el 20% de la población tenga acceso a 5G para finales de 2024, concentrado en zonas estratégicas de desarrollo económico, mientras que el INE reporta que el 68% de los hogares rurales carecen de acceso fijo a Internet en 2023. Además, se mencionan retos estructurales como la brecha digital y la necesidad de políticas de subsidios, lo que muestra que el argumento de que el 5G eliminará plenamente la brecha es insuficiente."
+                explanation: "El 5G solo cubrirá inicialmente zonas estratégicas (20% para 2024) y no resolverá por sí solo desigualdades estructurales que requieren políticas adicionales."
             },
             {
                 id: 26,
@@ -1124,11 +1634,11 @@
                     "El autor ha considerado todos los aspectos relevantes."
                 ],
                 correctAnswer: 0,
-                explanation: "El artículo describe la evolución tecnológica, la expansión urbana rural y los impactos en educación y salud, nunca menciona diferencias de acceso o uso entre hombres y mujeres. No se hace referencia a estudios de género ni a datos desagregados por sexo, lo que indica una omisión del sesgo de género."
+                explanation: "El artículo no menciona diferencias de acceso o uso entre hombres y mujeres, lo que indica una omisión del sesgo de género."
             },
             {
                 id: 27,
-                question: "Basándose en la información proporcionada, ¿cuál de las siguientes afirmaciones describe mejor la viabilidad de la meta boliviana de que el 20% de la población tenga acceso a 5G para finales de 2024, considerando la actual brecha digital entre áreas urbanas y rurales?",
+                question: "Basándose en la información proporcionada, ¿cuál de las siguientes afirmaciones describe mejor la viabilidad de la meta boliviana de que el 20% de la población tenga acceso a 5G para finales de 2024?",
                 options: [
                     "Es una meta plausible porque se enfoca en áreas urbanas y estratégicas donde ya existe infraestructura, aunque la brecha rural persista.",
                     "Es una meta imposible de alcanzar.",
@@ -1136,7 +1646,7 @@
                     "La meta no tiene relación con la brecha digital."
                 ],
                 correctAnswer: 0,
-                explanation: "El artículo indica que para finales de 2024 se espera que el 20% de la población tenga acceso a 5G, 'especialmente en zonas estratégicas de desarrollo económico'. Asimismo, señala que el 68% de los hogares rurales carecen de acceso fijo a Internet. Dado que la proyección del 5G está enfocada en áreas urbanas y estratégicas donde ya existen redes y la infraestructura es más robusta, la meta del 20% resulta plausible pese a la significativa brecha rural."
+                explanation: "La meta del 20% es plausible porque se enfoca en áreas urbanas y estratégicas donde ya existe infraestructura robusta."
             },
             {
                 id: 28,
@@ -1148,7 +1658,7 @@
                     "La creación de un fondo nacional para expansión rural."
                 ],
                 correctAnswer: 0,
-                explanation: "Aunque el autor propone varias medidas para reducir la brecha digital (subsidios a la inversión privada, capacitación digital en escuelas y comunidades, y un fondo nacional para expansión rural), en ningún apartado del artículo se menciona la inclusión explícita de la visión o necesidades de los pueblos indígenas."
+                explanation: "El autor no menciona la inclusión explícita de la visión o necesidades de los pueblos indígenas en sus propuestas."
             },
             {
                 id: 29,
@@ -1160,11 +1670,11 @@
                     "Limitar el acceso a Internet en zonas urbanas."
                 ],
                 correctAnswer: 0,
-                explanation: "La sección de 'Desafíos futuros' el artículo propone una combinación de políticas: incentivar la inversión privada mediante subsidios, promover la capacitación digital y crear un fondo nacional para la expansión de conectividad en zonas rurales."
+                explanation: "La combinación más adecuada según el artículo es: incentivar inversión privada mediante subsidios, promover capacitación digital y crear un fondo nacional para expansión rural."
             },
             {
                 id: 30,
-                question: "Según el artículo, la estimación de que el 20% de la población boliviana tendrá acceso a 5G para finales de 2024 debe evaluarse críticamente frente a la tendencia global de buscar una cobertura mayor del 50% en el mismo período; ¿cuál de las siguientes afirmaciones representa la valoración más adecuada de esta meta dentro del contexto boliviano?",
+                question: "Según el artículo, la estimación de que el 20% de la población boliviana tendrá acceso a 5G para finales de 2024 debe evaluarse críticamente frente a la tendencia global; ¿cuál de las siguientes afirmaciones representa la valoración más adecuada?",
                 options: [
                     "Es un paso progresivo realista, considerando las limitaciones de infraestructura y la necesidad de enfocarse inicialmente en zonas estratégicas.",
                     "Es una muestra del fracaso absoluto de Bolivia en telecomunicaciones.",
@@ -1172,7 +1682,7 @@
                     "La meta es demasiado alta para las capacidades bolivianas."
                 ],
                 correctAnswer: 0,
-                explanation: "Para finales de 2024, se espera que el 20% de la población tenga acceso a 5G, concentrándose inicialmente en zonas estratégicas como Puerto Suárez donde se realizó la prueba piloto. Además, el texto menciona que la expansión de fibra óptica ya cubre gran parte de las áreas urbanas, lo que permite un despliegue complementario. Sin embargo, también se señala que en 2023 el 68% de los hogares rurales carecen de acceso fijo a Internet, evidenciando una brecha digital que sigue siendo un desafío; por ello la meta del 20% es un paso progresivo, no una cobertura total."
+                explanation: "El 20% es un paso progresivo realista, considerando limitaciones de infraestructura y la necesidad de enfocarse inicialmente en zonas estratégicas."
             }
         ];
 
@@ -1188,7 +1698,7 @@
                     "La reducción de la matrícula universitaria."
                 ],
                 correctAnswer: 0,
-                explanation: "En la sección 'Movilización a través de plataformas digitales' del artículo se indica que el hashtag #ReformaEducativa2022 alcanzó más de 250000 interacciones y que la convocatoria resultó en una marcha en la Plaza Murillo con más de 5000 participantes."
+                explanation: "El hashtag #ReformaEducativa2022 alcanzó más de 250000 interacciones y resultó en una marcha en la Plaza Murillo con más de 5000 participantes."
             },
             {
                 id: 2,
@@ -1200,11 +1710,11 @@
                     "10 puntos porcentuales"
                 ],
                 correctAnswer: 0,
-                explanation: "El 76% de los jóvenes de La Paz declara sentirse capaz de distinguir noticias reales, mientras que en Potosí esa cifra es del 54%. La diferencia es 76% − 54% = 22 puntos porcentuales."
+                explanation: "El 76% de los jóvenes de La Paz declara sentirse capaz de distinguir noticias reales, mientras que en Potosí esa cifra es del 54%. La diferencia es 22 puntos porcentuales."
             },
             {
                 id: 3,
-                question: "La lectura del texto permite identificar que, según la teoría del 'Efecto de Red' citada en el apartado de movilización digital, ¿cuál es el segundo mecanismo que se menciona para explicar cómo las redes sociales favorecen la organización de protestas?",
+                question: "La lectura del texto permite identificar que, según la teoría del 'Efecto de Red', ¿cuál es el segundo mecanismo que se menciona para explicar cómo las redes sociales favorecen la organización de protestas?",
                 options: [
                     "La retroalimentación instantánea (likes, retweets) que refuerza la percepción de apoyo social.",
                     "La difusión de información que facilita la creación de una identidad colectiva.",
@@ -1224,7 +1734,7 @@
                     "30%"
                 ],
                 correctAnswer: 0,
-                explanation: "Según el texto, el 89% de los jóvenes bolivianos posee un smartphone y que en Potosí solo el 54% se siente capaz de distinguir noticias reales de falsas. La diferencia entre ambos porcentajes es 89% - 54% = 35%."
+                explanation: "El 89% de los jóvenes bolivianos posee un smartphone y en Potosí solo el 54% se siente capaz de distinguir noticias reales de falsas. La diferencia es 35%."
             },
             {
                 id: 5,
@@ -1248,7 +1758,7 @@
                     "La capacidad de usar todas las funciones de un smartphone."
                 ],
                 correctAnswer: 0,
-                explanation: "El artículo define la alfabetización digital como 'la capacidad de buscar, evaluar y utilizar la información digital de forma responsable' (UNESCO, 2022)."
+                explanation: "El artículo define la alfabetización digital como 'la capacidad de buscar, evaluar y utilizar la información digital de forma responsable'."
             },
             {
                 id: 7,
@@ -1260,11 +1770,11 @@
                     "La edad exacta de los jóvenes."
                 ],
                 correctAnswer: 0,
-                explanation: "El artículo indica que, aunque el 89% de los jóvenes posee un smartphone, la alfabetización digital sigue siendo desigual y es clave para evitar la apatía política. Además, las conclusiones recomiendan implementar programas de alfabetización digital en todos los niveles escolares para que los jóvenes puedan evaluar críticamente la información y participar de forma efectiva."
+                explanation: "La alfabetización digital es clave para evitar la apatía política y participar de forma efectiva, permitiendo evaluar críticamente la información."
             },
             {
                 id: 8,
-                question: "La lectura del texto permite identificar que, al comparar el proyecto 'Voces del Chaco' con la campaña Reforma Educativa 2022, ¿cuál es la diferencia principal en el uso de los medios digitales para la participación política de los jóvenes en temas ambientales?",
+                question: "La lectura del texto permite identificar que, al comparar el proyecto 'Voces del Chaco' con la campaña Reforma Educativa 2022, ¿cuál es la diferencia principal en el uso de los medios digitales?",
                 options: [
                     "'Voces del Chaco' se centra en participación simbólica (podcasts que generan debate), mientras que #ReformaEducativa2022 organizó una movilización física.",
                     "Ambas son exactamente iguales en objetivos y métodos.",
@@ -1272,7 +1782,7 @@
                     "Ninguna de las dos usó medios digitales de forma efectiva."
                 ],
                 correctAnswer: 0,
-                explanation: "El artículo describe que 'Voces del Chaco' consiste en una serie de podcasts compartidos en Instagram que generan debates sobre conservación ambiental y justicia social, es decir, una forma de participación simbólica centrada en temas ambientales. En contraste, la campaña #ReformaEducativa2022 se menciona como un caso de movilización digital donde un hashtag en Twitter y TikTok organizó una marcha presencial de más de 5000 personas."
+                explanation: "'Voces del Chaco' es participación simbólica (podcasts), mientras #ReformaEducativa2022 organizó movilización física."
             },
             {
                 id: 9,
@@ -1284,7 +1794,7 @@
                     "Tener un impacto político inmediato y directo."
                 ],
                 correctAnswer: 0,
-                explanation: "El texto describe a 'Voces del Chaco' como una serie de podcasts que generan debates y expresan opiniones de forma creativa, es decir, una forma de participación simbólica que no se traduce necesariamente en acciones presenciales, a diferencia del caso del hashtag #ReformaEducativa2022, cuya movilización digital resultó en una marcha con más de 5000 personas."
+                explanation: "'Voces del Chaco' es participación simbólica que no se traduce necesariamente en acciones presenciales, a diferencia de #ReformaEducativa2022 que resultó en marcha física."
             },
             {
                 id: 10,
@@ -1296,7 +1806,7 @@
                     "Las redes sociales dejen de ser utilizadas para movilización."
                 ],
                 correctAnswer: 0,
-                explanation: "La digitalización permite una movilización rápida y de bajo costo y que, para que el impacto sea positivo, se requieren políticas que fomenten la transparencia y la infraestructura digital. De manera implícita, el bajo costo de participar genera mayor presión de los jóvenes para que el Estado invierta en infraestructura digital, lo cual puede traducirse en beneficios económicos al ampliar el acceso a información y herramientas digitales."
+                explanation: "El bajo costo de participar genera mayor presión de los jóvenes para que el Estado invierta en infraestructura digital, lo cual puede traducirse en beneficios económicos."
             },
             {
                 id: 11,
@@ -1308,11 +1818,11 @@
                     "En ninguno de los dos casos tuvo impacto significativo."
                 ],
                 correctAnswer: 0,
-                explanation: "El caso de la UMSA mostró una movilización rápida y masiva con el hashtag #ReformaEducativa2022, alcanzando más de 250.000 interacciones y una marcha de 5,000 personas, lo que ejemplifica el 'efecto de red' descrito. En la región del Beni, por otro lado, el artículo indica que grupos rivales usaron WhatsApp para difundir mensajes polarizadores que dificultan la construcción de consensos, generando fragmentación y limitando la movilización colectiva."
+                explanation: "En la UMSA mostró movilización rápida y masiva, mientras en el Beni grupos rivales usaron WhatsApp para difundir mensajes polarizadores que dificultan consensos."
             },
             {
                 id: 12,
-                question: "El artículo señala que, al comparar la movilización a través de plataformas digitales con la expresión simbólica en redes sociales, la consecuencia social más distintiva para la participación política juvenil es que:",
+                question: "El artículo señala que, al comparar la movilización a través de plataformas digitales con la expresión simbólica en redes sociales, la consecuencia social más distintiva es que:",
                 options: [
                     "La movilización digital puede traducirse en acción colectiva concreta, mientras la expresión simbólica tiene un impacto principalmente en el ámbito del discurso y la identidad.",
                     "Ambas tienen exactamente las mismas consecuencias.",
@@ -1320,7 +1830,7 @@
                     "Solo la movilización digital es relevante para la participación política."
                 ],
                 correctAnswer: 0,
-                explanation: "El texto describe que la movilización a través de plataformas digitales, como el caso del hashtag #ReformaEducativa2022, llevó a una protesta física con más de 5 000 personas, lo que demuestra una traducción de la actividad en línea a acción colectiva concreta. Por otro lado, en la sección de 'Nuevas formas de expresión y participación simbólica' se indica que los memes, videos y podcasts fomentan el sentido de pertenencia y habilidades de comunicación, pero señala que 'la medida en que estas actividades se traducen en cambios políticos concretos sigue siendo objeto de investigación'."
+                explanation: "La movilización digital puede llevar a acción colectiva concreta, mientras la expresión simbólica fomenta sentido de pertenencia pero su traducción en cambios políticos concretos sigue siendo objeto de investigación."
             },
             {
                 id: 13,
@@ -1332,7 +1842,7 @@
                     "No hay relación entre expansión digital y participación política."
                 ],
                 correctAnswer: 0,
-                explanation: "El texto indica que el acceso a Internet en hogares pasó del 34% en 2013 al 71% en 2022 y que el 89% de los jóvenes posee un smartphone, evidenciando una expansión tecnológica importante. Sin embargo, la calidad de la participación varía: en La Paz el 76% de los jóvenes se siente capaz de distinguir noticias reales de falsas, mientras que en Potosí esa cifra es solo 54%. Además, la exposición a 'fake news' está asociada a una reducción del 12% en la probabilidad de votar."
+                explanation: "El acceso a Internet pasó del 34% en 2013 al 71% en 2022, pero la calidad de la participación varía según la alfabetización digital."
             },
             {
                 id: 14,
@@ -1344,7 +1854,7 @@
                     "Concentrar todos los esfuerzos en la compra de dispositivos tecnológicos."
                 ],
                 correctAnswer: 0,
-                explanation: "En la sección de conclusiones el autor propone tres líneas de acción futuras: (1) programas de alfabetización digital en todos los niveles escolares, (2) políticas públicas que fomenten la transparencia y faciliten la participación online mediante plataformas seguras, y (3) apoyo a iniciativas de contenido juvenil que integren investigación académica con formatos digitales."
+                explanation: "El autor propone: programas de alfabetización digital, políticas públicas que fomenten la transparencia, y apoyo a iniciativas de contenido juvenil que integren investigación académica."
             },
             {
                 id: 15,
@@ -1356,7 +1866,7 @@
                     "Provocará el rechazo total de la comunidad académica."
                 ],
                 correctAnswer: 0,
-                explanation: "El artículo indica que el proyecto 'Voces del Chaco' ha generado debates entre la comunidad académica y ONG, facilitando la inserción de la perspectiva juvenil en la agenda pública. Por lo tanto, ampliar la producción y difusión de contenidos similares plausiblemente reforzará esa inserción y ejercerá presión para que las instituciones consideren políticas de conservación."
+                explanation: "'Voces del Chaco' ha generado debates entre la comunidad académica y ONG, facilitando la inserción de la perspectiva juvenil en la agenda pública."
             },
             {
                 id: 16,
@@ -1368,7 +1878,7 @@
                     "Solo la campaña de la UMSA utilizó medios digitales."
                 ],
                 correctAnswer: 0,
-                explanation: "El texto describe que la campaña #ReformaEducativa2022, difundida mediante el hashtag en Twitter y TikTok, logró más de 250 000 interacciones y movilizó a más de 5 000 personas en una marcha, evidenciando una identificación colectiva y acción física. En contraste, el párrafo sobre el Beni señala que grupos rivales usan WhatsApp para difundir mensajes polarizadores que dificultan la construcción de consensos, indicando un efecto de fragmentación y polarización."
+                explanation: "La campaña UMSA logró identificación colectiva y acción física, mientras en el Beni hubo fragmentación y polarización mediante WhatsApp."
             },
             {
                 id: 17,
@@ -1380,7 +1890,7 @@
                     "Solo los jóvenes sin smartphones participan activamente en política."
                 ],
                 correctAnswer: 0,
-                explanation: "El artículo indica que, aunque el 89% de los jóvenes posee un smartphone y el 68% usa internet cotidianamente, la mera posesión no garantiza participación crítica; la alfabetización digital, definida como la capacidad de buscar, evaluar y usar información digital responsablemente, sigue siendo desigual y se señala como factor clave para que la digitalización no se traduzca en apatía política."
+                explanation: "Aunque el 89% posee smartphone, la mera posesión no garantiza participación crítica; la alfabetización digital es clave."
             },
             {
                 id: 18,
@@ -1392,7 +1902,7 @@
                     "No tenga ningún efecto en la participación política."
                 ],
                 correctAnswer: 0,
-                explanation: "El artículo señala que el 89% de los jóvenes poseía un smartphone, pero la alfabetización digital es desigual (76% en La Paz versus 54% en Potosí) y que la exposición a 'fake news' está vinculada a una reducción del 12% en la probabilidad de votar. Asimismo, se recomienda implementar programas de alfabetización digital para mejorar la capacidad crítica."
+                explanation: "Programas de alfabetización digital mejorarían la capacidad crítica y mitigarían la reducción del 12% en probabilidad de votar por exposición a fake news."
             },
             {
                 id: 19,
@@ -1404,7 +1914,7 @@
                     "No tendrá impacto en la participación política."
                 ],
                 correctAnswer: 0,
-                explanation: "El artículo subraya que la alfabetización digital es clave para que la digitalización no conduzca a apatía política; menciona que la exposición a 'fake news' reduce la intención de voto en un 12% y que mejorar la capacidad de evaluar la veracidad de la información debería revertir esa tendencia, incrementando la participación electoral."
+                explanation: "La alfabetización digital es clave para que la digitalización no conduzca a apatía política; mejorar la capacidad de evaluar información debería aumentar participación electoral."
             },
             {
                 id: 20,
@@ -1416,11 +1926,11 @@
                     "Solo participan a través de canales tradicionales."
                 ],
                 correctAnswer: 0,
-                explanation: "El artículo muestra dos casos específicos: la movilización de estudiantes de la UMSA mediante el hashtag #ReformaEducativa2022, que evidencia la capacidad de los jóvenes para organizar protestas masivas, y el proyecto 'Voces del Chaco', que ilustra la generación de contenido simbólico (podcasts) que inserta sus perspectivas en la agenda pública."
+                explanation: "Los jóvenes actúan como catalizadores coordinando acciones colectivas (como #ReformaEducativa2022) y creando discursos digitales (como 'Voces del Chaco')."
             },
             {
                 id: 21,
-                question: "Basándose en la información proporcionada, ¿qué diferencia económica se puede inferir entre la movilización digital de los jóvenes mediante hashtags y la exposición a noticias falsas en relación con su potencial efecto sobre la participación electoral?",
+                question: "Basándose en la información proporcionada, ¿qué diferencia económica se puede inferir entre la movilización digital de los jóvenes mediante hashtags y la exposición a noticias falsas?",
                 options: [
                     "La movilización digital puede aumentar la influencia económica de los jóvenes al impactar políticas públicas, mientras que la exposición a noticias falsas reduce su capacidad de influir económicamente.",
                     "Ambas aumentan la influencia económica de los jóvenes.",
@@ -1428,7 +1938,7 @@
                     "No hay relación entre estos factores y la economía."
                 ],
                 correctAnswer: 0,
-                explanation: "El texto describe que el hashtag #ReformaEducativa2022 movilizó a más de 5000 personas y alcanzó 250000 interacciones, lo que evidencia una capacidad de generar participación política concreta; esa participación puede traducirse en una mayor influencia económica de los jóvenes al impactar decisiones de políticas públicas. En contraste, el artículo indica que la exposición a noticias falsas está vinculada a una reducción del 12% en la probabilidad de voto, lo que implica una menor capacidad de influir económicamente en los procesos electorales."
+                explanation: "La movilización digital puede traducirse en mayor influencia económica al impactar políticas públicas, mientras la exposición a fake news reduce capacidad de influir en procesos electorales."
             },
             {
                 id: 22,
@@ -1440,7 +1950,7 @@
                     "Ignorar completamente el contexto boliviano."
                 ],
                 correctAnswer: 0,
-                explanation: "El artículo utiliza estadísticas de la Encuesta Nacional de Jóvenes 2022 y del INE (por ejemplo, el 89% de jóvenes con smartphone) junto con casos de estudio concretos como la campaña #ReformaEducativa2022 de la UMSA y el proyecto 'Voces del Chaco'. Esta mezcla de fuentes cuantitativas y cualitativas brinda triangulación y contextualiza los resultados."
+                explanation: "El artículo utiliza estadísticas junto con casos de estudio concretos, brindando triangulación y contextualizando resultados."
             },
             {
                 id: 23,
@@ -1452,7 +1962,7 @@
                     "Inválido, porque la alfabetización digital reduce la participación política."
                 ],
                 correctAnswer: 0,
-                explanation: "En la sección de conclusiones el autor afirma que la digitalización ofrece una oportunidad histórica para revitalizar la democracia, siempre que se acompañe de políticas que promuevan el pensamiento crítico y la alfabetización digital. Además, en el apartado sobre alfabetización digital se muestra que la capacidad de distinguir noticias reales de falsas está vinculada a una mayor intención de participar, lo que respalda la relación entre alfabetización y participación política."
+                explanation: "Válido porque la alfabetización digital está vinculada a mayor intención de participar, y es condición para que digitalización revitalice democracia."
             },
             {
                 id: 24,
@@ -1464,7 +1974,7 @@
                     "El apoyo a la producción de contenido juvenil."
                 ],
                 correctAnswer: 0,
-                explanation: "El artículo reconoce desigualdades en acceso a internet según la ubicación geográfica, las tres líneas de acción propuestas en la conclusión se centran en alfabetización digital, transparencia institucional y apoyo a contenidos juveniles, sin mencionar medidas concretas para ampliar la infraestructura de conectividad en zonas rurales."
+                explanation: "Las soluciones propuestas no mencionan medidas concretas para ampliar infraestructura de conectividad en zonas rurales."
             },
             {
                 id: 25,
@@ -1476,7 +1986,7 @@
                     "Testimonios anecdóticos de jóvenes activistas."
                 ],
                 correctAnswer: 0,
-                explanation: "El texto señala que la alfabetización digital es clave para que la digitalización no genere apatía política, pero la evidencia presentada es mayormente correlacional (por ejemplo, diferencias entre La Paz y Potosí). Para demostrar que los programas de alfabetización incrementan la intención de voto, se requeriría evidencia experimental que controle variables y mida cambios en la intención de voto antes y después de la intervención."
+                explanation: "Se requeriría evidencia experimental que controle variables y mida cambios en intención de voto antes y después de intervención de alfabetización digital."
             },
             {
                 id: 26,
@@ -1488,7 +1998,7 @@
                     "Porque reemplazan la educación cívica tradicional."
                 ],
                 correctAnswer: 0,
-                explanation: "El artículo señala que, aunque el 89% de los jóvenes posee smartphone, la alfabetización digital sigue siendo desigual (76% en La Paz vs 54% en Potosí) y que la exposición a noticias falsas reduce en un 12% la probabilidad de voto. Por lo tanto, programas educativos que desarrollen la capacidad de buscar, evaluar y usar información digital son esenciales para mitigar la desinformación y favorecer una participación política más informada y activa."
+                explanation: "Programas de alfabetización digital desarrollan capacidad de buscar, evaluar y usar información digital, mitigando desinformación y favoreciendo participación política más informada."
             },
             {
                 id: 27,
@@ -1500,11 +2010,11 @@
                     "Asume que todos los jóvenes tienen igual acceso económico a la tecnología."
                 ],
                 correctAnswer: 0,
-                explanation: "El artículo indica que el 89% de los jóvenes posee un smartphone y menciona diferencias geográficas y educativas, no aborda explícitamente cómo la situación socio económica (ingresos familiares, capacidad de pago de planes de datos, etc.) afecta el acceso y la calidad de la participación digital. Esta omisión constituye un sesgo económico."
+                explanation: "El artículo no aborda explícitamente cómo la situación socioeconómica afecta acceso y calidad de participación digital, un sesgo económico."
             },
             {
                 id: 28,
-                question: "Del análisis presentado se desprende que, en contraste con la concepción tradicional de que la defensa ambiental depende principalmente de acciones de campo, ¿qué afirma el artículo sobre el papel de iniciativas digitales como los podcasts 'Voces del Chaco' en la influencia de políticas medioambientales?",
+                question: "Del análisis presentado se desprende que, en contraste con la concepción tradicional de que la defensa ambiental depende principalmente de acciones de campo, ¿qué afirma el artículo sobre el papel de iniciativas digitales como los podcasts 'Voces del Chaco'?",
                 options: [
                     "Pueden facilitar la inserción de la perspectiva juvenil en la agenda pública, aunque su traducción en cambios políticos concretos requiere más investigación.",
                     "No tienen ningún valor para la defensa ambiental.",
@@ -1512,11 +2022,11 @@
                     "Garantizan cambios políticos inmediatos."
                 ],
                 correctAnswer: 0,
-                explanation: "La sección 'Nuevas formas de expresión y participación simbólica' se describe que el proyecto 'Voces del Chaco' ha generado debates y ha facilitado la inserción de la perspectiva juvenil en la agenda pública, pero el artículo también señala que la medida en que estas actividades se traduzcan en cambios políticos concretos sigue siendo objeto de investigación."
+                explanation: "Iniciativas digitales como 'Voces del Chaco' pueden facilitar inserción de perspectiva juvenil en agenda pública, aunque su traducción en cambios políticos concretos requiere más investigación."
             },
             {
                 id: 29,
-                question: "A partir de lo expuesto en el artículo, ¿cuáles son las principales implicaciones éticas y sociales que deben considerarse al diseñar programas de alfabetización digital dirigidos a los jóvenes bolivianos para fortalecer su participación política?",
+                question: "A partir de lo expuesto en el artículo, ¿cuáles son las principales implicaciones éticas y sociales que deben considerarse al diseñar programas de alfabetización digital dirigidos a los jóvenes bolivianos?",
                 options: [
                     "Reducir la brecha de acceso entre regiones, proteger a los jóvenes de la manipulación de información y asegurar la inclusión digital.",
                     "Enseñar solo habilidades técnicas de uso de dispositivos.",
@@ -1524,11 +2034,11 @@
                     "Fomentar el uso indiscriminado de redes sociales sin criterio."
                 ],
                 correctAnswer: 0,
-                explanation: "El artículo subraya que la digitalización solo favorece la participación política si se acompañan políticas de alfabetización digital que incluyan pensamiento crítico, inclusión digital y medidas contra la desinformación. Además, señala la necesidad de reducir la brecha de acceso entre regiones como La Paz y Potosí y de proteger a los jóvenes de la manipulación de información."
+                explanation: "Implicaciones éticas incluyen: reducir brecha de acceso entre regiones, proteger de manipulación de información y asegurar inclusión digital."
             },
             {
                 id: 30,
-                question: "De acuerdo con el texto, ¿cuáles son las implicaciones éticas más relevantes de la desigualdad en alfabetización digital entre los jóvenes de La Paz y Potosí para la calidad de la participación política?",
+                question: "De acuerdo con el texto, ¿cuáles son las implicaciones éticas más relevantes de la desigualdad en alfabetización digital entre los jóvenes de La Paz y Potosí?",
                 options: [
                     "La falta de alfabetización digital expone a ciertos jóvenes a desinformación, lo que afecta su intención de participar y vulnera el principio de igualdad democrática.",
                     "No hay implicaciones éticas significativas.",
@@ -1536,7 +2046,7 @@
                     "Beneficia a los jóvenes de La Paz en detrimento de los de Potosí."
                 ],
                 correctAnswer: 0,
-                explanation: "El texto señala que en La Paz el 76% de los jóvenes se siente capaz de distinguir noticias reales de falsas, mientras que en Potosí esa cifra cae al 54%. Además, se menciona que la exposición a 'fake news' está vinculada a una reducción del 12% en la probabilidad de votar. Esta combinación indica una vulnerabilidad ética: la falta de alfabetización digital expone a ciertos jóvenes a desinformación, lo que afecta su intención de participar y vulnera el principio de igualdad democrática."
+                explanation: "La desigualdad en alfabetización digital expone a ciertos jóvenes a desinformación, afecta su intención de participar y vulnera principio de igualdad democrática."
             }
         ];
 
@@ -1579,9 +2089,19 @@
             showSubMenu('Biología');
         });
         
+        document.getElementById('geography-btn').addEventListener('click', () => {
+            currentDiscipline = 'geography';
+            showSubMenu('Geografía');
+        });
+        
         document.getElementById('history-btn').addEventListener('click', () => {
             currentDiscipline = 'history';
-            showSubMenu('Historia y evolución del Internet en Bolivia');
+            showSubMenu('Historia');
+        });
+        
+        document.getElementById('internet-history-btn').addEventListener('click', () => {
+            currentDiscipline = 'internetHistory';
+            showSubMenu('Historia del Internet en Bolivia');
         });
         
         document.getElementById('digital-btn').addEventListener('click', () => {
@@ -1647,9 +2167,15 @@
             if (currentDiscipline === 'biology') {
                 simulacroBtn.classList.add('biology');
                 repasoBtn.classList.add('biology');
+            } else if (currentDiscipline === 'geography') {
+                simulacroBtn.classList.add('geography');
+                repasoBtn.classList.add('geography');
             } else if (currentDiscipline === 'history') {
                 simulacroBtn.classList.add('history');
                 repasoBtn.classList.add('history');
+            } else if (currentDiscipline === 'internetHistory') {
+                simulacroBtn.classList.add('internet-history');
+                repasoBtn.classList.add('internet-history');
             } else if (currentDiscipline === 'digital') {
                 simulacroBtn.classList.add('digital');
                 repasoBtn.classList.add('digital');
@@ -1678,8 +2204,12 @@
             restartBtn.className = 'menu-btn';
             if (currentDiscipline === 'biology') {
                 restartBtn.classList.add('biology');
+            } else if (currentDiscipline === 'geography') {
+                restartBtn.classList.add('geography');
             } else if (currentDiscipline === 'history') {
                 restartBtn.classList.add('history');
+            } else if (currentDiscipline === 'internetHistory') {
+                restartBtn.classList.add('internet-history');
             } else if (currentDiscipline === 'digital') {
                 restartBtn.classList.add('digital');
             }
@@ -1692,8 +2222,12 @@
             switch(currentDiscipline) {
                 case 'biology':
                     return biologyQuestions;
+                case 'geography':
+                    return geographyQuestions;
                 case 'history':
                     return historyQuestions;
+                case 'internetHistory':
+                    return internetHistoryQuestions;
                 case 'digital':
                     return digitalizationQuestions;
                 default:
@@ -1705,8 +2239,12 @@
             switch(currentDiscipline) {
                 case 'biology':
                     return 'Biología';
+                case 'geography':
+                    return 'Geografía';
                 case 'history':
-                    return 'Historia y evolución del Internet en Bolivia';
+                    return 'Historia';
+                case 'internetHistory':
+                    return 'Historia del Internet en Bolivia';
                 case 'digital':
                     return 'Impacto de la digitalización';
                 default:
