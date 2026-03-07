@@ -406,12 +406,12 @@
     <script>
         (function() {
             // ==================== BASE DE PREGUNTAS (50) ====================
-            // Ahora con preguntas más fáciles y explicaciones largas
+            // Preguntas más fáciles, con opciones de 3 palabras y explicaciones largas (sin comillas sin escapar)
             const questions = [
-                // EXCEL (30 preguntas) - Simplificadas
+                // EXCEL (30 preguntas)
                 { question: "¿Cómo se llama cada rectángulo donde se ingresan datos en Excel?", options: ["Se llama celda", "Se llama rango", "Se llama tabla", "Se llama hoja"], correct: 0,
                   explanation: "En Excel, una celda es la intersección de una fila y una columna. Es la unidad básica donde se escriben números, texto o fórmulas. Por ejemplo, la celda A1 está en la columna A y fila 1." },
-                { question: "¿Qué función suma todos los números de un rango?", options: ["Usar función SUMA", "Usar función SUMA", "Usar función TOTAL", "Usar función SUMAR"], correct: 0,
+                { question: "¿Qué función suma todos los números de un rango?", options: ["Usar función SUMA", "Emplear función SUMA", "Aplicar función SUMA", "Utilizar función SUMA"], correct: 0,
                   explanation: "La función SUMA es la más básica para sumar. Se escribe =SUMA(A1:A10) y suma todos los valores desde A1 hasta A10. También puedes sumar celdas sueltas: =SUMA(A1; B3; C5)." },
                 { question: "¿Cómo se selecciona una columna entera rápidamente?", options: ["Click en letra columna", "Presionar Ctrl + Espacio", "Arrastrar desde primera", "Menú Inicio > Seleccionar"], correct: 1,
                   explanation: "Para seleccionar una columna completa, haz clic en la letra de la columna (como A, B, C) o usa el atajo Ctrl + Espacio. Esto es útil para aplicar formato o insertar columnas." },
@@ -456,11 +456,11 @@
                 { question: "¿Cómo activar filtros en una tabla?", options: ["Datos > Filtro", "Inicio > Filtro", "Insertar > Filtro", "Revisar > Filtro"], correct: 0,
                   explanation: "Selecciona los datos y haz clic en 'Filtro' en la pestaña Datos. Aparecerán flechas en los encabezados para filtrar valores específicos." },
                 { question: "¿Qué función devuelve un resultado según una condición?", options: ["Usar función SI", "Usar función IF", "Usar función CONDICION", "Usar función EVALUAR"], correct: 0,
-                  explanation: "La función SI evalúa una condición y devuelve un valor si es verdadera y otro si es falsa. Por ejemplo: =SI(A1>10, "Mayor", "Menor o igual")." },
+                  explanation: "La función SI evalúa una condición y devuelve un valor si es verdadera y otro si es falsa. Por ejemplo: =SI(A1>10, \"Mayor\", \"Menor o igual\")." },
                 { question: "¿Cómo renombrar una hoja de Excel?", options: ["Doble click en pestaña", "Click derecho renombrar", "Menú formato hoja", "Propiedades de hoja"], correct: 0,
                   explanation: "Haz doble clic en el nombre de la hoja (abajo) y escribe el nuevo nombre. También puedes hacer clic derecho y elegir 'Cambiar nombre'." },
                 { question: "¿Qué función extrae parte de un texto?", options: ["Usar función EXTRAE", "Usar función MID", "Usar función IZQUIERDA", "Usar función DERECHA"], correct: 0,
-                  explanation: "EXTRAE devuelve un número específico de caracteres de una cadena, empezando en la posición que indiques. Por ejemplo, =EXTRAE("Hola",2,2) devuelve "ol"." },
+                  explanation: "EXTRAE devuelve un número específico de caracteres de una cadena, empezando en la posición que indiques. Por ejemplo, =EXTRAE(\"Hola\",2,2) devuelve \"ol\"." },
                 { question: "¿Cómo eliminar filas duplicadas?", options: ["Datos > Quitar duplicados", "Inicio > Duplicados", "Revisar > Duplicados", "Fórmula > Unicos"], correct: 0,
                   explanation: "En la pestaña Datos, haz clic en 'Quitar duplicados' para eliminar filas que tengan valores repetidos en las columnas seleccionadas." },
                 { question: "¿Qué herramienta permite probar diferentes valores en fórmulas?", options: ["Administrador de escenarios", "Buscar objetivo", "Tabla de datos", "Solver complemento"], correct: 0,
@@ -468,9 +468,9 @@
                 { question: "¿Cómo insertar una fila en una tabla?", options: ["Click derecho insertar", "Inicio > Insertar", "Ctrl + Shift + +", "Menú tabla fila"], correct: 2,
                   explanation: "Selecciona una fila y presiona Ctrl + Shift + + (signo más) para insertar una nueva fila arriba. También puedes hacer clic derecho en el número de fila y elegir 'Insertar'." },
                 { question: "¿Qué función convierte texto a número?", options: ["Usar función VALOR", "Usar function NUMBER", "Usar función TEXTO", "Usar function CONVERTIR"], correct: 0,
-                  explanation: "VALOR convierte un texto que parece un número (como "123") en un valor numérico real para poder usarlo en cálculos." },
+                  explanation: "VALOR convierte un texto que parece un número (como \"123\") en un valor numérico real para poder usarlo en cálculos." },
                 
-                // WORD (10 preguntas) - Simplificadas
+                // WORD (10 preguntas)
                 { question: "¿Qué combinación de teclas pone texto en negrita?", options: ["Usar Ctrl + N", "Usar Ctrl + K", "Usar Ctrl + B", "Usar Ctrl + G"], correct: 2,
                   explanation: "Ctrl + B (Bold) aplica negrita al texto seleccionado. En Word, también puedes usar el botón N en la cinta de inicio." },
                 { question: "¿Dónde se cambian los márgenes del documento?", options: ["Diseño > Márgenes", "Formato > Márgenes", "Archivo > Márgenes", "Revisar > Márgenes"], correct: 0,
@@ -492,7 +492,7 @@
                 { question: "¿Cómo crear una tabla de contenido automática?", options: ["Referencias > Tabla contenido", "Insertar > Índice", "Diseño > Contenido", "Inicio > Sumario"], correct: 0,
                   explanation: "Usa estilos de título (Título 1, Título 2) en tu documento y luego en Referencias > Tabla de contenido elige un formato automático." },
                 
-                // POWERPOINT (5 preguntas) - Simplificadas
+                // POWERPOINT (5 preguntas)
                 { question: "¿Cómo añadir una nueva diapositiva?", options: ["Inicio > Nueva diapositiva", "Insertar > Diapositiva", "Diseño > Nueva", "Archivo > Nueva"], correct: 0,
                   explanation: "En la pestaña Inicio, haz clic en 'Nueva diapositiva' para agregar una. Puedes elegir el diseño (título, contenido, etc.) desde el menú desplegable." },
                 { question: "¿Dónde se aplican efectos de entrada a objetos?", options: ["Animaciones > Agregar animación", "Transiciones > Efectos", "Presentación > Efectos", "Diseño > Animaciones"], correct: 0,
@@ -504,7 +504,7 @@
                 { question: "¿Qué tecla inicia la presentación desde la primera diapositiva?", options: ["F5 tecla rápida", "Presentación > Iniciar", "Vista > Presentación", "Shift + F5 actual"], correct: 0,
                   explanation: "Presiona F5 para empezar la presentación desde el principio. Si quieres empezar desde la diapositiva actual, usa Shift + F5." },
                 
-                // TECNOLOGÍA GENERAL (5 preguntas) - Simplificadas
+                // TECNOLOGÍA GENERAL (5 preguntas)
                 { question: "¿Qué significa la sigla CPU?", options: ["Unidad central proceso", "Procesador principal", "Cerebro computadora", "Chip de memoria"], correct: 0,
                   explanation: "CPU (Central Processing Unit) es el cerebro de la computadora, ejecuta instrucciones y procesa datos. Realiza operaciones aritméticas y lógicas." },
                 { question: "¿Qué memoria guarda datos temporalmente mientras el equipo está encendido?", options: ["Memoria RAM", "Disco duro", "Memoria caché", "Memoria ROM"], correct: 0,
@@ -584,11 +584,9 @@
                 // Agregar event listeners a las opciones para resaltar y guardar
                 document.querySelectorAll('.option').forEach(optDiv => {
                     optDiv.addEventListener('click', function(e) {
-                        // Si el clic fue en el label o en el div, seleccionar el radio
                         const radio = this.querySelector('input[type="radio"]');
                         if (radio) {
                             radio.checked = true;
-                            // Disparar evento change manualmente
                             const event = new Event('change', { bubbles: true });
                             radio.dispatchEvent(event);
                         }
@@ -600,9 +598,7 @@
                     radio.addEventListener('change', function(e) {
                         const optIndex = parseInt(this.value);
                         userAnswers[currentIndex] = optIndex;
-                        // Quitar clase selected de todas las opciones
                         document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
-                        // Añadir clase al padre del radio seleccionado
                         this.closest('.option').classList.add('selected');
                     });
                 });
@@ -662,7 +658,6 @@
                 questions.forEach((q, idx) => {
                     const userAns = userAnswers[idx];
                     const isCorrect = (userAns === q.correct);
-                    // Mostrar solo las incorrectas
                     if (!isCorrect) {
                         const userAnswerText = (userAns !== null) ? q.options[userAns] : 'No respondida';
                         const correctAnswerText = q.options[q.correct];
