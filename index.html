@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Examen de Computación Básica con Repaso</title>
+    <title>Examen de Computación Básica - Modo Simulacro</title>
     <style>
         * {
             box-sizing: border-box;
@@ -92,7 +92,7 @@
         .btn-start:hover {
             background: #5a67d8;
         }
-        /* Estilos del examen (igual que antes) */
+        /* Estilos del examen */
         .progress {
             display: flex;
             justify-content: space-between;
@@ -131,7 +131,7 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
         .option {
             display: flex;
@@ -164,11 +164,36 @@
             font-size: 1em;
             color: #333;
         }
+        .feedback {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+        .feedback.correct {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            display: block;
+        }
+        .feedback.incorrect {
+            background: #f8d7da;
+            border-left: 5px solid #dc3545;
+            display: block;
+        }
+        .feedback h4 {
+            margin-bottom: 10px;
+        }
+        .explanation {
+            margin-top: 10px;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
         .navigation {
             display: flex;
             justify-content: space-between;
             gap: 10px;
             flex-wrap: wrap;
+            margin-top: 20px;
         }
         button {
             background: #667eea;
@@ -196,6 +221,14 @@
         }
         button.secondary:hover {
             background: #f0f3ff;
+        }
+        button.verify {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+        button.verify:hover {
+            background: #218838;
         }
         .results {
             text-align: center;
@@ -248,6 +281,13 @@
             color: #dc3545;
             font-weight: bold;
         }
+        .review-explanation {
+            margin-top: 10px;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
         .hidden {
             display: none;
         }
@@ -261,18 +301,19 @@
 </head>
 <body>
     <div class="quiz-container" id="quizContainer">
-        <h1>📋 Evaluación de Computación</h1>
+        <h1>📋 Evaluación de Computación - Modo Simulacro</h1>
         
         <!-- Pantalla de repaso inicial -->
         <div id="reviewIntroView" class="review-intro">
-            <p>Antes de comenzar, repasa los temas que se evaluarán en las 50 preguntas. Todo el contenido del examen está basado en este resumen.</p>
+            <p>Antes de comenzar, repasa los temas que se evaluarán en las 50 preguntas. Todo el contenido del examen está basado en este resumen y cuenta con explicaciones detalladas para que aprendas mientras practicas.</p>
             
             <div class="topic-list">
                 <div class="topic-card">
                     <h3>📊 Excel (30 preguntas)</h3>
                     <ul>
                         <li>Celdas, filas, columnas</li>
-                        <li>Fórmulas: SUMA, PROMEDIO, BUSCARV, SI, CONTAR</li>
+                        <li>Fórmulas básicas: SUMA, PROMEDIO, CONTAR</li>
+                        <li>BUSCARV, BUSCARH, SI</li>
                         <li>Formato condicional</li>
                         <li>Tablas dinámicas</li>
                         <li>Gráficos</li>
@@ -316,7 +357,7 @@
             </div>
             
             <button class="btn-start" id="startExamBtn">Comenzar Examen</button>
-            <p style="margin-top: 15px; color: #777;">50 preguntas de opción múltiple. ¡Buena suerte!</p>
+            <p style="margin-top: 15px; color: #777;">50 preguntas de opción múltiple. Puedes verificar cada respuesta y leer explicaciones detalladas.</p>
         </div>
         
         <!-- Vista del examen (inicialmente oculta) -->
@@ -334,8 +375,12 @@
                 <!-- Pregunta actual generada por JS -->
             </div>
             
+            <!-- Feedback dinámico -->
+            <div id="feedbackArea" class="feedback"></div>
+            
             <div class="navigation">
                 <button id="prevBtn" class="secondary" disabled>⬅ Anterior</button>
+                <button id="verifyBtn" class="verify">✓ Verificar respuesta</button>
                 <button id="nextBtn">Siguiente ➔</button>
                 <button id="submitBtn" class="secondary">Finalizar</button>
             </div>
@@ -347,7 +392,7 @@
             <div class="score" id="scoreDisplay">0%</div>
             <p id="correctCount">0 de 50 respuestas correctas</p>
             
-            <!-- Sección de revisión de errores -->
+            <!-- Sección de revisión de errores con explicaciones -->
             <div class="review-section" id="reviewContainer">
                 <!-- Aquí se generará la lista de preguntas falladas -->
             </div>
@@ -355,71 +400,121 @@
             <button id="restartBtn">Reintentar 🔄</button>
         </div>
         
-        <footer>© 2025 - Examen de 50 preguntas con repaso</footer>
+        <footer>© 2025 - Examen de 50 preguntas con simulacro y explicaciones</footer>
     </div>
 
     <script>
         (function() {
             // ==================== BASE DE PREGUNTAS (50) ====================
-            // Todas las opciones tienen EXACTAMENTE 3 palabras para que sea difícil adivinar.
+            // Ahora con preguntas más fáciles y explicaciones largas
             const questions = [
-                // EXCEL (30 preguntas)
-                { question: "¿Cómo se llama la intersección de una fila y columna?", options: ["Es una celda", "Es un rango", "Es una tabla", "Es un campo"], correct: 0 },
-                { question: "¿Qué función suma un rango de celdas?", options: ["Usar función SUMA", "Usar función ADD", "Usar función TOTAL", "Usar función PLUS"], correct: 0 },
-                { question: "¿Cómo seleccionar una columna completa?", options: ["Click en encabezado", "Presionar Ctrl + Espacio", "Arrastrar sobre celdas", "Usar menú contextual"], correct: 1 },
-                { question: "¿Qué hace la función BUSCARV?", options: ["Buscar verticalmente", "Buscar valores exactos", "Buscar en tablas", "Buscar horizontalmente"], correct: 0 },
-                { question: "¿Qué gráfico muestra tendencias temporales?", options: ["Gráfico de líneas", "Gráfico circular", "Gráfico de barras", "Gráfico de columnas"], correct: 0 },
-                { question: "¿Cómo congelar paneles en Excel?", options: ["Vista > Inmovilizar", "Menú Ventana > Congelar", "Click derecho congelar", "Atajo Ctrl + L"], correct: 0 },
-                { question: "¿Qué función calcula el promedio?", options: ["Usar función PROMEDIO", "Usar función MEDIA", "Usar función AVERAGE", "Usar función MEAN"], correct: 0 },
-                { question: "¿Qué formato resalta celdas con reglas?", options: ["Formato condicional", "Estilos de celda", "Tablas dinámicas", "Validación de datos"], correct: 0 },
-                { question: "¿Qué herramienta crea tablas resumen?", options: ["Tabla dinámica", "Tabla normal", "Gráfico dinámico", "Segmentación de datos"], correct: 0 },
-                { question: "¿Qué atajo pega solo valores?", options: ["Alt + V + V", "Ctrl + Shift + V", "Ctrl + Alt + V", "Click derecho pegado"], correct: 1 },
-                { question: "¿Cómo ordenar datos ascendente?", options: ["Usar ordenar A-Z", "Filtro avanzado", "Botón ordenar", "Menú datos ordenar"], correct: 0 },
-                { question: "¿Qué función cuenta celdas con números?", options: ["Usar función CONTAR", "Usar función CONTARA", "Usar función COUNT", "Usar función COUNTIF"], correct: 0 },
-                { question: "¿Cómo combinar varias celdas?", options: ["Combinar y centrar", "Unir celdas", "Fusión de celdas", "Merge cells"], correct: 0 },
-                { question: "¿Qué función busca un valor horizontal?", options: ["Usar BUSCARH", "Usar HLOOKUP", "Usar BUSCARV", "Usar VLOOKUP"], correct: 0 },
-                { question: "¿Cómo proteger una hoja?", options: ["Revisar > Proteger", "Archivo > Proteger", "Datos > Proteger", "Inicio > Proteger"], correct: 0 },
-                { question: "¿Qué herramienta valida datos de entrada?", options: ["Validación de datos", "Formato condicional", "Reglas de datos", "Comprobación errores"], correct: 0 },
-                { question: "¿Qué atajo repite la última acción?", options: ["Presionar tecla F4", "Presionar Ctrl + Y", "Presionar Ctrl + R", "Presionar Alt + Enter"], correct: 0 },
-                { question: "¿Cómo insertar una función?", options: ["Click en fx", "Menú fórmulas", "Insertar función", "Atajo Shift + F3"], correct: 0 },
-                { question: "¿Qué función devuelve el valor máximo?", options: ["Usar función MAX", "Usar función MAXIMO", "Usar función MAXA", "Usar función LARGE"], correct: 0 },
-                { question: "¿Qué función cuenta celdas vacías?", options: ["Usar CONTAR.BLANCO", "Usar COUNTBLANK", "Usar CONTAR.VACIO", "Usar COUNTEMPTY"], correct: 0 },
-                { question: "¿Cómo crear un gráfico rápidamente?", options: ["Seleccionar datos + F11", "Insertar gráfico recomendado", "Click en asistente", "Atajo Alt + F1"], correct: 0 },
-                { question: "¿Qué tipo de referencia es $A$1?", options: ["Referencia absoluta", "Referencia mixta", "Referencia relativa", "Referencia externa"], correct: 0 },
-                { question: "¿Cómo aplicar filtros a datos?", options: ["Datos > Filtro", "Inicio > Filtro", "Insertar > Filtro", "Revisar > Filtro"], correct: 0 },
-                { question: "¿Qué función evalúa una condición?", options: ["Usar función SI", "Usar función IF", "Usar función CONDICION", "Usar función EVALUAR"], correct: 0 },
-                { question: "¿Cómo cambiar el nombre de una hoja?", options: ["Doble click en pestaña", "Click derecho renombrar", "Menú formato hoja", "Propiedades de hoja"], correct: 0 },
-                { question: "¿Qué función extrae caracteres?", options: ["Usar función EXTRAE", "Usar función MID", "Usar función IZQUIERDA", "Usar función DERECHA"], correct: 0 },
-                { question: "¿Cómo quitar duplicados?", options: ["Datos > Quitar duplicados", "Inicio > Duplicados", "Revisar > Duplicados", "Fórmula > Unicos"], correct: 0 },
-                { question: "¿Qué herramienta hace análisis Y si?", options: ["Administrador de escenarios", "Buscar objetivo", "Tabla de datos", "Solver complemento"], correct: 0 },
-                { question: "¿Cómo insertar fila en tabla?", options: ["Click derecho insertar", "Inicio > Insertar", "Ctrl + Shift + +", "Menú tabla fila"], correct: 2 },
-                { question: "¿Qué función convierte texto en número?", options: ["Usar función VALOR", "Usar function NUMBER", "Usar función TEXTO", "Usar function CONVERTIR"], correct: 0 },
+                // EXCEL (30 preguntas) - Simplificadas
+                { question: "¿Cómo se llama cada rectángulo donde se ingresan datos en Excel?", options: ["Se llama celda", "Se llama rango", "Se llama tabla", "Se llama hoja"], correct: 0,
+                  explanation: "En Excel, una celda es la intersección de una fila y una columna. Es la unidad básica donde se escriben números, texto o fórmulas. Por ejemplo, la celda A1 está en la columna A y fila 1." },
+                { question: "¿Qué función suma todos los números de un rango?", options: ["Usar función SUMA", "Usar función SUMA", "Usar función TOTAL", "Usar función SUMAR"], correct: 0,
+                  explanation: "La función SUMA es la más básica para sumar. Se escribe =SUMA(A1:A10) y suma todos los valores desde A1 hasta A10. También puedes sumar celdas sueltas: =SUMA(A1; B3; C5)." },
+                { question: "¿Cómo se selecciona una columna entera rápidamente?", options: ["Click en letra columna", "Presionar Ctrl + Espacio", "Arrastrar desde primera", "Menú Inicio > Seleccionar"], correct: 1,
+                  explanation: "Para seleccionar una columna completa, haz clic en la letra de la columna (como A, B, C) o usa el atajo Ctrl + Espacio. Esto es útil para aplicar formato o insertar columnas." },
+                { question: "¿Qué función busca un valor en la primera columna de una tabla?", options: ["Usar función BUSCARV", "Usar función BUSCARH", "Usar función LOCALIZAR", "Usar función ENCONTRAR"], correct: 0,
+                  explanation: "BUSCARV (Buscar Vertical) busca un valor en la columna más a la izquierda de un rango y devuelve un valor en la misma fila desde una columna especificada. Es muy usada para buscar precios, nombres, etc." },
+                { question: "¿Qué tipo de gráfico es mejor para ver cambios en el tiempo?", options: ["Gráfico de líneas", "Gráfico circular", "Gráfico de barras", "Gráfico de columnas"], correct: 0,
+                  explanation: "El gráfico de líneas muestra tendencias a lo largo de un período (días, meses, años). Conecta puntos de datos con líneas, ideal para ventas mensuales o temperaturas." },
+                { question: "¿Cómo se mantienen visibles las filas superiores al desplazarse?", options: ["Inmovilizar paneles", "Congelar fila superior", "Vista > Dividir", "Anclar fila"], correct: 1,
+                  explanation: "Para mantener visible la primera fila mientras te desplazas, ve a Vista > Inmovilizar > Inmovilizar fila superior. Esto es útil cuando tienes encabezados de columna." },
+                { question: "¿Qué función calcula el promedio de un conjunto de números?", options: ["Usar función PROMEDIO", "Usar función MEDIA", "Usar función AVERAGE", "Usar función PROM"], correct: 0,
+                  explanation: "La función PROMEDIO devuelve el promedio aritmético. Por ejemplo, =PROMEDIO(B2:B10) suma los valores y los divide entre el número de celdas que contienen números." },
+                { question: "¿Qué herramienta cambia el color de fondo de celdas según reglas?", options: ["Formato condicional", "Estilos de celda", "Color de relleno", "Temas de Excel"], correct: 0,
+                  explanation: "El formato condicional aplica formato (color, iconos, barras) automáticamente a celdas que cumplan una condición, por ejemplo, pintar de rojo las ventas menores a 1000." },
+                { question: "¿Qué herramienta resume grandes cantidades de datos?", options: ["Tabla dinámica", "Tabla normal", "Resumen automático", "Filtro avanzado"], correct: 0,
+                  explanation: "Las tablas dinámicas permiten agrupar, filtrar y resumir datos de forma interactiva. Puedes sumar ventas por producto, contar clientes por ciudad, etc., sin fórmulas complejas." },
+                { question: "¿Qué atajo pega únicamente los valores sin formato?", options: ["Alt + V + V", "Ctrl + Shift + V", "Ctrl + Alt + V", "Click derecho pegado"], correct: 1,
+                  explanation: "Ctrl+Shift+V pega solo el valor de la celda copiada, sin fórmulas ni formatos. En versiones recientes, también aparece un menú al hacer clic derecho con opciones de pegado especial." },
+                { question: "¿Cómo ordenar datos de la A a la Z?", options: ["Usar ordenar A-Z", "Filtro > Ordenar", "Botón ordenar ascendente", "Menú datos ordenar"], correct: 0,
+                  explanation: "Para ordenar alfabéticamente o numéricamente de menor a mayor, selecciona los datos y haz clic en el botón 'Ordenar de A a Z' en la pestaña Datos o Inicio." },
+                { question: "¿Qué función cuenta únicamente celdas con números?", options: ["Usar función CONTAR", "Usar función CONTARA", "Usar función COUNT", "Usar función NUMERO"], correct: 0,
+                  explanation: "CONTAR cuenta las celdas que contienen números. Por ejemplo, =CONTAR(A1:A10) devuelve cuántas celdas tienen valores numéricos. Para contar cualquier celda no vacía se usa CONTARA." },
+                { question: "¿Cómo se fusionan varias celdas en una sola?", options: ["Combinar y centrar", "Unir celdas", "Fusionar celdas", "Merge cells"], correct: 0,
+                  explanation: "Selecciona las celdas y haz clic en 'Combinar y centrar' en la pestaña Inicio. Esto las convierte en una sola celda, útil para títulos. También puedes combinarlas sin centrar desde el menú." },
+                { question: "¿Qué función busca un valor en la primera fila de una tabla?", options: ["Usar BUSCARH", "Usar HLOOKUP", "Usar BUSCARV", "Usar VLOOKUP"], correct: 0,
+                  explanation: "BUSCARH (Buscar Horizontal) busca un valor en la fila superior de una tabla y devuelve un valor de la misma columna en una fila especificada. Es útil cuando los datos están organizados horizontalmente." },
+                { question: "¿Cómo evitar que otros modifiquen una hoja?", options: ["Revisar > Proteger hoja", "Archivo > Proteger", "Datos > Proteger hoja", "Inicio > Proteger"], correct: 0,
+                  explanation: "En la pestaña Revisar, selecciona 'Proteger hoja' para evitar cambios no deseados. Puedes establecer una contraseña y permitir solo ciertas acciones." },
+                { question: "¿Qué herramienta restringe los datos que se pueden ingresar en una celda?", options: ["Validación de datos", "Formato condicional", "Reglas de datos", "Comprobación errores"], correct: 0,
+                  explanation: "La validación de datos permite definir qué tipo de datos se pueden ingresar (números, fechas, listas desplegables) y mostrar mensajes de error si el usuario ingresa algo no válido." },
+                { question: "¿Qué tecla repite la última acción en Excel?", options: ["Presionar tecla F4", "Presionar Ctrl + Y", "Presionar Ctrl + R", "Presionar Alt + Enter"], correct: 0,
+                  explanation: "F4 repite la última acción, como aplicar formato o insertar filas. Ctrl+Y también sirve para rehacer, pero F4 es específico para repetir comandos." },
+                { question: "¿Cómo se inserta una función rápidamente?", options: ["Click en fx", "Menú fórmulas", "Insertar función", "Atajo Shift + F3"], correct: 0,
+                  explanation: "Haz clic en el botón 'fx' (Insertar función) junto a la barra de fórmulas para abrir un cuadro de diálogo que te ayuda a buscar y usar cualquier función." },
+                { question: "¿Qué función devuelve el valor más alto de un rango?", options: ["Usar función MAX", "Usar función MAXIMO", "Usar función MAYOR", "Usar function LARGE"], correct: 0,
+                  explanation: "MAX devuelve el valor máximo de un conjunto de números. Por ejemplo, =MAX(A1:A20) te da el número más grande en ese rango." },
+                { question: "¿Qué función cuenta celdas vacías en un rango?", options: ["Usar CONTAR.BLANCO", "Usar COUNTBLANK", "Usar CONTAR.VACIO", "Usar COUNTEMPTY"], correct: 0,
+                  explanation: "CONTAR.BLANCO cuenta las celdas vacías. Por ejemplo, =CONTAR.BLANCO(A1:A10) devuelve cuántas celdas están sin datos en ese rango." },
+                { question: "¿Qué atajo crea un gráfico en una nueva hoja?", options: ["Seleccionar datos + F11", "Insertar gráfico recomendado", "Click en asistente", "Atajo Alt + F1"], correct: 0,
+                  explanation: "Selecciona los datos y presiona F11 para crear automáticamente un gráfico en una hoja nueva. Alt+F1 lo crea en la misma hoja." },
+                { question: "¿Qué significa la referencia $A$1?", options: ["Referencia absoluta", "Referencia mixta", "Referencia relativa", "Referencia externa"], correct: 0,
+                  explanation: "El signo $ fija la columna y la fila. Al copiar una fórmula con $A$1, siempre se referirá a esa celda, sin ajustarse. Es útil para constantes." },
+                { question: "¿Cómo activar filtros en una tabla?", options: ["Datos > Filtro", "Inicio > Filtro", "Insertar > Filtro", "Revisar > Filtro"], correct: 0,
+                  explanation: "Selecciona los datos y haz clic en 'Filtro' en la pestaña Datos. Aparecerán flechas en los encabezados para filtrar valores específicos." },
+                { question: "¿Qué función devuelve un resultado según una condición?", options: ["Usar función SI", "Usar función IF", "Usar función CONDICION", "Usar función EVALUAR"], correct: 0,
+                  explanation: "La función SI evalúa una condición y devuelve un valor si es verdadera y otro si es falsa. Por ejemplo: =SI(A1>10, "Mayor", "Menor o igual")." },
+                { question: "¿Cómo renombrar una hoja de Excel?", options: ["Doble click en pestaña", "Click derecho renombrar", "Menú formato hoja", "Propiedades de hoja"], correct: 0,
+                  explanation: "Haz doble clic en el nombre de la hoja (abajo) y escribe el nuevo nombre. También puedes hacer clic derecho y elegir 'Cambiar nombre'." },
+                { question: "¿Qué función extrae parte de un texto?", options: ["Usar función EXTRAE", "Usar función MID", "Usar función IZQUIERDA", "Usar función DERECHA"], correct: 0,
+                  explanation: "EXTRAE devuelve un número específico de caracteres de una cadena, empezando en la posición que indiques. Por ejemplo, =EXTRAE("Hola",2,2) devuelve "ol"." },
+                { question: "¿Cómo eliminar filas duplicadas?", options: ["Datos > Quitar duplicados", "Inicio > Duplicados", "Revisar > Duplicados", "Fórmula > Unicos"], correct: 0,
+                  explanation: "En la pestaña Datos, haz clic en 'Quitar duplicados' para eliminar filas que tengan valores repetidos en las columnas seleccionadas." },
+                { question: "¿Qué herramienta permite probar diferentes valores en fórmulas?", options: ["Administrador de escenarios", "Buscar objetivo", "Tabla de datos", "Solver complemento"], correct: 0,
+                  explanation: "El Administrador de escenarios guarda diferentes conjuntos de valores y muestra los resultados. Es útil para análisis de sensibilidad." },
+                { question: "¿Cómo insertar una fila en una tabla?", options: ["Click derecho insertar", "Inicio > Insertar", "Ctrl + Shift + +", "Menú tabla fila"], correct: 2,
+                  explanation: "Selecciona una fila y presiona Ctrl + Shift + + (signo más) para insertar una nueva fila arriba. También puedes hacer clic derecho en el número de fila y elegir 'Insertar'." },
+                { question: "¿Qué función convierte texto a número?", options: ["Usar función VALOR", "Usar function NUMBER", "Usar función TEXTO", "Usar function CONVERTIR"], correct: 0,
+                  explanation: "VALOR convierte un texto que parece un número (como "123") en un valor numérico real para poder usarlo en cálculos." },
                 
-                // WORD (10 preguntas)
-                { question: "¿Qué formato pone texto en negrita?", options: ["Usar Ctrl + N", "Usar Ctrl + K", "Usar Ctrl + B", "Usar Ctrl + G"], correct: 2 },
-                { question: "¿Cómo cambiar márgenes del documento?", options: ["Diseño > Márgenes", "Formato > Márgenes", "Archivo > Márgenes", "Revisar > Márgenes"], correct: 0 },
-                { question: "¿Qué atajo guarda el documento?", options: ["Presionar Ctrl + G", "Presionar Ctrl + A", "Presionar Ctrl + S", "Presionar Ctrl + D"], correct: 2 },
-                { question: "¿Cómo insertar una tabla?", options: ["Insertar > Tabla", "Diseño > Tabla", "Referencias > Tabla", "Inicio > Tabla"], correct: 0 },
-                { question: "¿Qué función revisa ortografía?", options: ["Revisar > Ortografía", "Archivo > Ortografía", "Inicio > Ortografía", "Vista > Ortografía"], correct: 0 },
-                { question: "¿Cómo poner encabezado en página?", options: ["Insertar > Encabezado", "Diseño > Encabezado", "Referencias > Encabezado", "Formato > Encabezado"], correct: 0 },
-                { question: "¿Qué tipo de sangría existe?", options: ["Sangría francesa", "Sangría normal", "Sangría completa", "Sangría doble"], correct: 0 },
-                { question: "¿Cómo insertar número de página?", options: ["Insertar > Número página", "Diseño > Numeración", "Referencias > Número", "Inicio > Página"], correct: 0 },
-                { question: "¿Qué vista muestra el documento como libro?", options: ["Vista de lectura", "Diseño de impresión", "Diseño web", "Esquema"], correct: 0 },
-                { question: "¿Cómo crear una tabla de contenido?", options: ["Referencias > Tabla contenido", "Insertar > Índice", "Diseño > Contenido", "Inicio > Sumario"], correct: 0 },
+                // WORD (10 preguntas) - Simplificadas
+                { question: "¿Qué combinación de teclas pone texto en negrita?", options: ["Usar Ctrl + N", "Usar Ctrl + K", "Usar Ctrl + B", "Usar Ctrl + G"], correct: 2,
+                  explanation: "Ctrl + B (Bold) aplica negrita al texto seleccionado. En Word, también puedes usar el botón N en la cinta de inicio." },
+                { question: "¿Dónde se cambian los márgenes del documento?", options: ["Diseño > Márgenes", "Formato > Márgenes", "Archivo > Márgenes", "Revisar > Márgenes"], correct: 0,
+                  explanation: "En la pestaña Diseño (o Presentación), haz clic en Márgenes y elige una opción predefinida o personalizada. Los márgenes controlan el espacio en blanco alrededor del texto." },
+                { question: "¿Qué atajo guarda el documento actual?", options: ["Presionar Ctrl + G", "Presionar Ctrl + A", "Presionar Ctrl + S", "Presionar Ctrl + D"], correct: 2,
+                  explanation: "Ctrl + S guarda el documento. Es importante usarlo frecuentemente para no perder cambios." },
+                { question: "¿Cómo insertar una tabla en Word?", options: ["Insertar > Tabla", "Diseño > Tabla", "Referencias > Tabla", "Inicio > Tabla"], correct: 0,
+                  explanation: "Ve a la pestaña Insertar, haz clic en Tabla y selecciona el número de filas y columnas que necesitas." },
+                { question: "¿Qué herramienta revisa la ortografía y gramática?", options: ["Revisar > Ortografía", "Archivo > Ortografía", "Inicio > Ortografía", "Vista > Ortografía"], correct: 0,
+                  explanation: "En la pestaña Revisar, haz clic en Ortografía y gramática para que Word revise el documento y sugiera correcciones." },
+                { question: "¿Cómo agregar un encabezado a todas las páginas?", options: ["Insertar > Encabezado", "Diseño > Encabezado", "Referencias > Encabezado", "Formato > Encabezado"], correct: 0,
+                  explanation: "Ve a Insertar > Encabezado y elige un estilo. El texto que escribas aparecerá en la parte superior de todas las páginas." },
+                { question: "¿Qué tipo de sangría deja la primera línea más adentro?", options: ["Sangría francesa", "Sangría normal", "Sangría completa", "Sangría primera línea"], correct: 3,
+                  explanation: "La sangría de primera línea desplaza solo la primera línea del párrafo hacia la derecha. Se configura en el cuadro de diálogo Párrafo." },
+                { question: "¿Cómo insertar números de página?", options: ["Insertar > Número página", "Diseño > Numeración", "Referencias > Número", "Inicio > Página"], correct: 0,
+                  explanation: "En la pestaña Insertar, haz clic en Número de página y elige la posición (superior, inferior, etc.)." },
+                { question: "¿Qué vista de Word muestra el documento como un libro?", options: ["Vista de lectura", "Diseño de impresión", "Diseño web", "Esquema"], correct: 0,
+                  explanation: "La vista de lectura optimiza el documento para leerlo en pantalla, con botones para pasar páginas y ajustar el zoom." },
+                { question: "¿Cómo crear una tabla de contenido automática?", options: ["Referencias > Tabla contenido", "Insertar > Índice", "Diseño > Contenido", "Inicio > Sumario"], correct: 0,
+                  explanation: "Usa estilos de título (Título 1, Título 2) en tu documento y luego en Referencias > Tabla de contenido elige un formato automático." },
                 
-                // POWERPOINT (5 preguntas)
-                { question: "¿Cómo insertar nueva diapositiva?", options: ["Inicio > Nueva diapositiva", "Insertar > Diapositiva", "Diseño > Nueva", "Archivo > Nueva"], correct: 0 },
-                { question: "¿Qué herramienta aplica efectos de entrada?", options: ["Animaciones > Agregar animación", "Transiciones > Efectos", "Presentación > Efectos", "Diseño > Animaciones"], correct: 0 },
-                { question: "¿Cómo duplicar una diapositiva?", options: ["Click derecho duplicar", "Inicio > Duplicar", "Insertar > Duplicar", "Ctrl + D selección"], correct: 3 },
-                { question: "¿Qué patrón controla el diseño global?", options: ["Patrón de diapositivas", "Diseño maestro", "Estilos rápidos", "Temas de diapositiva"], correct: 0 },
-                { question: "¿Cómo iniciar presentación?", options: ["F5 tecla rápida", "Presentación > Iniciar", "Vista > Presentación", "Shift + F5 actual"], correct: 0 },
+                // POWERPOINT (5 preguntas) - Simplificadas
+                { question: "¿Cómo añadir una nueva diapositiva?", options: ["Inicio > Nueva diapositiva", "Insertar > Diapositiva", "Diseño > Nueva", "Archivo > Nueva"], correct: 0,
+                  explanation: "En la pestaña Inicio, haz clic en 'Nueva diapositiva' para agregar una. Puedes elegir el diseño (título, contenido, etc.) desde el menú desplegable." },
+                { question: "¿Dónde se aplican efectos de entrada a objetos?", options: ["Animaciones > Agregar animación", "Transiciones > Efectos", "Presentación > Efectos", "Diseño > Animaciones"], correct: 0,
+                  explanation: "Selecciona un objeto y en la pestaña Animaciones elige una animación (aparecer, deslizar, etc.). Puedes configurar la duración y el inicio." },
+                { question: "¿Cómo duplicar rápidamente una diapositiva?", options: ["Click derecho duplicar", "Inicio > Duplicar", "Insertar > Duplicar", "Ctrl + D selección"], correct: 3,
+                  explanation: "Selecciona la diapositiva en el panel izquierdo y presiona Ctrl + D. También puedes hacer clic derecho y elegir 'Duplicar diapositiva'." },
+                { question: "¿Qué patrón permite cambiar el diseño global de todas las diapositivas?", options: ["Patrón de diapositivas", "Diseño maestro", "Estilos rápidos", "Temas de diapositiva"], correct: 0,
+                  explanation: "En Vista > Patrón de diapositivas, puedes modificar el fondo, fuentes y logotipos que se aplicarán a todas las diapositivas." },
+                { question: "¿Qué tecla inicia la presentación desde la primera diapositiva?", options: ["F5 tecla rápida", "Presentación > Iniciar", "Vista > Presentación", "Shift + F5 actual"], correct: 0,
+                  explanation: "Presiona F5 para empezar la presentación desde el principio. Si quieres empezar desde la diapositiva actual, usa Shift + F5." },
                 
-                // TECNOLOGÍA GENERAL (5 preguntas)
-                { question: "¿Qué significa CPU?", options: ["Unidad central proceso", "Procesador principal", "Cerebro computadora", "Chip de memoria"], correct: 0 },
-                { question: "¿Qué almacena temporalmente datos activos?", options: ["Memoria RAM", "Disco duro", "Memoria caché", "Memoria ROM"], correct: 0 },
-                { question: "¿Qué sistema operativo es de Microsoft?", options: ["Windows 11", "macOS Ventura", "Linux Ubuntu", "Android 14"], correct: 0 },
-                { question: "¿Qué extensión es de documento Word?", options: [".docx archivo", ".xlsx archivo", ".pptx archivo", ".pdf archivo"], correct: 0 },
-                { question: "¿Qué servicio guarda archivos en internet?", options: ["Nube almacenamiento", "Disco local", "Memoria USB", "Servidor FTP"], correct: 0 }
+                // TECNOLOGÍA GENERAL (5 preguntas) - Simplificadas
+                { question: "¿Qué significa la sigla CPU?", options: ["Unidad central proceso", "Procesador principal", "Cerebro computadora", "Chip de memoria"], correct: 0,
+                  explanation: "CPU (Central Processing Unit) es el cerebro de la computadora, ejecuta instrucciones y procesa datos. Realiza operaciones aritméticas y lógicas." },
+                { question: "¿Qué memoria guarda datos temporalmente mientras el equipo está encendido?", options: ["Memoria RAM", "Disco duro", "Memoria caché", "Memoria ROM"], correct: 0,
+                  explanation: "La RAM (Random Access Memory) almacena datos y programas en uso de forma temporal. Al apagar el equipo, su contenido se pierde." },
+                { question: "¿Qué sistema operativo es desarrollado por Microsoft?", options: ["Windows 11", "macOS Ventura", "Linux Ubuntu", "Android 14"], correct: 0,
+                  explanation: "Windows es el sistema operativo de Microsoft. Las versiones recientes incluyen Windows 10 y Windows 11." },
+                { question: "¿Qué extensión corresponde a un documento de Word?", options: [".docx archivo", ".xlsx archivo", ".pptx archivo", ".pdf archivo"], correct: 0,
+                  explanation: "Los documentos de Word modernos usan la extensión .docx. Los archivos .xlsx son de Excel, .pptx de PowerPoint y .pdf es un formato de documento portátil." },
+                { question: "¿Qué servicio permite guardar archivos en Internet?", options: ["Nube almacenamiento", "Disco local", "Memoria USB", "Servidor FTP"], correct: 0,
+                  explanation: "El almacenamiento en la nube (como OneDrive, Google Drive, Dropbox) guarda archivos en servidores remotos y se puede acceder desde cualquier dispositivo con Internet." }
             ];
 
             // ==================== VARIABLES GLOBALES ====================
@@ -436,6 +531,7 @@
             const questionDisplay = document.getElementById('questionDisplay');
             const prevBtn = document.getElementById('prevBtn');
             const nextBtn = document.getElementById('nextBtn');
+            const verifyBtn = document.getElementById('verifyBtn');
             const submitBtn = document.getElementById('submitBtn');
             const restartBtn = document.getElementById('restartBtn');
             const currentQuestionNum = document.getElementById('currentQuestionNum');
@@ -444,6 +540,7 @@
             const scoreDisplay = document.getElementById('scoreDisplay');
             const correctCount = document.getElementById('correctCount');
             const reviewContainer = document.getElementById('reviewContainer');
+            const feedbackArea = document.getElementById('feedbackArea');
 
             totalQuestionsSpan.textContent = totalQuestions;
 
@@ -480,6 +577,10 @@
                 prevBtn.disabled = (currentIndex === 0);
                 nextBtn.disabled = (currentIndex === totalQuestions - 1);
 
+                // Ocultar feedback al cambiar de pregunta
+                feedbackArea.innerHTML = '';
+                feedbackArea.className = 'feedback';
+
                 // Agregar event listeners a las opciones para resaltar y guardar
                 document.querySelectorAll('.option').forEach(optDiv => {
                     optDiv.addEventListener('click', function(e) {
@@ -505,6 +606,33 @@
                         this.closest('.option').classList.add('selected');
                     });
                 });
+            }
+
+            function showFeedback() {
+                const selected = userAnswers[currentIndex];
+                if (selected === null) {
+                    alert('Selecciona una respuesta primero.');
+                    return;
+                }
+                const q = questions[currentIndex];
+                const isCorrect = (selected === q.correct);
+                const correctAnswerText = q.options[q.correct];
+                let feedbackHTML = '';
+                if (isCorrect) {
+                    feedbackHTML = `
+                        <h4 style="color: #28a745;">✅ ¡Correcto!</h4>
+                        <div class="explanation">${q.explanation}</div>
+                    `;
+                    feedbackArea.className = 'feedback correct';
+                } else {
+                    feedbackHTML = `
+                        <h4 style="color: #dc3545;">❌ Incorrecto</h4>
+                        <p><strong>Respuesta correcta:</strong> ${correctAnswerText}</p>
+                        <div class="explanation">${q.explanation}</div>
+                    `;
+                    feedbackArea.className = 'feedback incorrect';
+                }
+                feedbackArea.innerHTML = feedbackHTML;
             }
 
             function goToPrev() {
@@ -534,7 +662,7 @@
                 questions.forEach((q, idx) => {
                     const userAns = userAnswers[idx];
                     const isCorrect = (userAns === q.correct);
-                    // Solo mostrar las incorrectas
+                    // Mostrar solo las incorrectas
                     if (!isCorrect) {
                         const userAnswerText = (userAns !== null) ? q.options[userAns] : 'No respondida';
                         const correctAnswerText = q.options[q.correct];
@@ -543,6 +671,7 @@
                                 <div class="review-question">${idx + 1}. ${q.question}</div>
                                 <div class="review-answer"><span class="review-wrong">✘ Tu respuesta:</span> ${userAnswerText}</div>
                                 <div class="review-answer"><span class="review-correct">✔ Correcta:</span> ${correctAnswerText}</div>
+                                <div class="review-explanation"><strong>Explicación:</strong> ${q.explanation}</div>
                             </div>
                         `;
                     }
@@ -564,7 +693,6 @@
             }
 
             function startExam() {
-                // Ocultar repaso y mostrar examen
                 reviewIntroView.classList.add('hidden');
                 quizView.classList.remove('hidden');
                 renderQuestion();
@@ -583,6 +711,7 @@
             startBtn.addEventListener('click', startExam);
             prevBtn.addEventListener('click', goToPrev);
             nextBtn.addEventListener('click', goToNext);
+            verifyBtn.addEventListener('click', showFeedback);
             submitBtn.addEventListener('click', function() {
                 if (confirm('¿Estás seguro de que deseas finalizar el examen?')) {
                     showResults();
